@@ -13,6 +13,15 @@ public class Validation {
 		return isValid;
 	}
 	
+	public static boolean validateOption(int inputNum) {
+		if (inputNum == 1 || inputNum == 2) {
+			isValid = true;
+		} else {
+			isValid = false;
+		}
+		return isValid;
+	}
+	
 	public static void printValidationMessage() {
 		if (isValid != true) {
 			System.out.println("Invalid input. Please enter a valid integer.");
