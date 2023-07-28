@@ -87,6 +87,7 @@ public class Run {
 		gameBoard = new Board(boardSize);
 		
 		gameBoard.printBoard(false, false);
+		System.out.printf("-- You have %d mines --\n", gameBoard.getMinesCount());
 		
 		while (this.isGameRunning) {
 			

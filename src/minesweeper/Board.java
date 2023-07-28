@@ -8,6 +8,7 @@ public class Board {
 //	private final int num = 10;
 	private final int boardSize;
 	private final int edge;
+	private int minesCount;
 	
 	/**
 	 * mines will be 100
@@ -19,21 +20,42 @@ public class Board {
 	private int[][] gameBoard;
 	
 	Board(int boardSize) {
-		this.generateMinesCoords();
 		this.boardSize = boardSize;
 		this.edge = this.boardSize - 1;
+		this.setDifficulty();
 		this.minesCoords = new int[this.boardSize][this.boardSize];
 		this.gameBoard = new int[this.boardSize][this.boardSize];
+		this.generateMinesCoords();
+		
 	}
 	
 	public int getRandomNum() {
 		return (int) Math.round(Math.random()* (this.boardSize - 1));
 	}
 	
+	public void setDifficulty() {
+		switch(this.boardSize) {
+		case 10:
+		case 11:
+			this.minesCount = 10;
+			break;
+		case 12:
+		case 13:
+			this.minesCount = 20;
+			break;
+		case 14:
+			this.minesCount = 25;
+			break;
+		case 15:
+			this.minesCount = 30;
+			break;	
+		}
+	}
+	
 	public void generateMinesCoords () {
 		int bombCounter = 0;
 		
-		while (bombCounter < this.boardSize) {			
+		while (bombCounter < this.minesCount) {			
 			int x = getRandomNum();
 			int y = getRandomNum();
 			
@@ -44,7 +66,9 @@ public class Board {
 			} else {
 				continue;
 			}
-		}		
+		}	
+		
+		System.out.printf("create mines: %d *****\n", bombCounter);
 	}
 	
 	// getter
@@ -54,6 +78,10 @@ public class Board {
 	
 	public int[][] getGameBoard() {
 		return this.gameBoard;
+	}
+	
+	public int getMinesCount() {
+		return this.minesCount;
 	}
 	
 	public boolean isMine (int x, int y) {
@@ -204,7 +232,7 @@ public class Board {
 		if (x != 0 && y != this.edge && this.minesCoords[y+1][x-1] == 100) {
 			minesCounter++;
 		}
-		if (x != 9 && y != this.edge && this.minesCoords[y+1][x+1] == 100) {
+		if (x != this.edge && y != this.edge && this.minesCoords[y+1][x+1] == 100) {
 			minesCounter++;
 		}
 		
