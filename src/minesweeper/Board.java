@@ -5,7 +5,9 @@ import java.util.Arrays;
 
 // gird class to render grid every time with numbers
 public class Board {
-	private final int num = 10;
+//	private final int num = 10;
+	private final int boardSize;
+	private final int edge;
 	
 	/**
 	 * mines will be 100
@@ -13,21 +15,25 @@ public class Board {
 	 * flags will be 88
 	 * */
 	
-	private int[][] minesCoords = new int[this.num][this.num];
-	private int[][] gameBoard = new int[this.num][this.num];
+	private int[][] minesCoords;
+	private int[][] gameBoard;
 	
-	Board() {
+	Board(int boardSize) {
 		this.generateMinesCoords();
+		this.boardSize = boardSize;
+		this.edge = this.boardSize - 1;
+		this.minesCoords = new int[this.boardSize][this.boardSize];
+		this.gameBoard = new int[this.boardSize][this.boardSize];
 	}
 	
 	public int getRandomNum() {
-		return (int) Math.round(Math.random()* (this.num - 1));
+		return (int) Math.round(Math.random()* (this.boardSize - 1));
 	}
 	
 	public void generateMinesCoords () {
 		int bombCounter = 0;
 		
-		while (bombCounter < 10) {			
+		while (bombCounter < this.boardSize) {			
 			int x = getRandomNum();
 			int y = getRandomNum();
 			
@@ -72,15 +78,15 @@ public class Board {
 		}
 	}
 	
-	public void placeNum(int x, int y, int num) {
-		if (num == 0) {
-			// if the selected coord has 0 mine -> 99
-			// since the empty element is 0 
-			this.gameBoard[y][x] = 99;
-		} else {
-			this.gameBoard[y][x] = num;
-		}
-	}
+//	public void placeNum(int x, int y, int num) {
+//		if (num == 0) {
+//			// if the selected coord has 0 mine -> 99
+//			// since the empty element is 0 
+//			this.gameBoard[y][x] = 99;
+//		} else {
+//			this.gameBoard[y][x] = num;
+//		}
+//	}
 	
 	public void printBoard(boolean isDone, boolean isFlag) {
 		if (isDone) {
@@ -94,28 +100,43 @@ public class Board {
 		}
 	}
 	
+	public String printLine() {
+		String lines = "";
+		for (int i=1; i<=(this.boardSize * 3.6); i++ ) {
+			lines += "-";
+		}
+		return lines;
+	}
+	
+	public String printColumnNums() {
+		String columns = "       ";
+		for (int i=1; i<=(this.boardSize); i++ ) {
+			if (i < 10) {
+				columns += " " + i + " ";
+			} else {
+				columns += " " + i;	
+			}
+		}
+		return columns;
+	}
+	
+	
 	public void printGameBoard(int[][] array, int num) {
-		 char mark = (num == 100) ? '*' :  '0' ;
-//		char mark;
-//		if (num == 100) {
-//			mark = '*';
-//		} else if (num == 99) {
-//			mark = '0';
-//		} else if (num == 88) {
-//			mark = '@';
-//		} else {
-//			mark = 'x';
-//		}
-		
+		char mark = (num == 100) ? '*' :  '0' ;
+
 		//88 || 99 should be handled together!
 		
-		int index = 0;
+		int index = 1;
 		
-		System.out.println("-------------------------");
-		System.out.println("    0 1 2 3 4 5 6 7 8 9");
+		System.out.println(printLine());
+		System.out.println(printColumnNums());
 		
 		for (int[] row: array) {
-			System.out.printf("%d  |", index);
+			if (index < 10) {
+				System.out.printf("  %d    |", index);
+			} else {
+				System.out.printf(" %d    |", index);
+			}
 			for (int cell:row) {
 				if (cell == 0) {
 					System.out.printf(" ");
@@ -132,17 +153,16 @@ public class Board {
 					} else if (cell == 99) {
 						System.out.printf("%s", '0');
 					} else {
-
 						System.out.printf("%d", cell);						
 					}
 				}
-				System.out.printf("|");
+				System.out.printf(" |");
 				
 			}
 			System.out.printf("\n");
 			index++;
 		}
-		System.out.println("-------------------------");
+		System.out.println(printLine());
 	}
 	
 	
@@ -166,7 +186,7 @@ public class Board {
 		if (x != 0 && this.minesCoords[y][x-1] == 100) {
 			minesCounter++;
 		}
-		if (x != 9 && this.minesCoords[y][x+1] == 100) {
+		if (x != this.edge && this.minesCoords[y][x+1] == 100) {
 			minesCounter++;
 		}
 		if (y != 0 && this.minesCoords[y-1][x] == 100) {
@@ -175,20 +195,57 @@ public class Board {
 		if (x != 0  && y != 0 && this.minesCoords[y-1][x-1] == 100) {
 			minesCounter++;
 		}
-		if (x != 9  && y != 0 && this.minesCoords[y-1][x+1] == 100) {
+		if (x != this.edge  && y != 0 && this.minesCoords[y-1][x+1] == 100) {
 			minesCounter++;
 		}
-		if (y != 9 && this.minesCoords[y+1][x] == 100) {
+		if (y != this.edge && this.minesCoords[y+1][x] == 100) {
 			minesCounter++;
 		}
-		if (x != 0 && y != 9 && this.minesCoords[y+1][x-1] == 100) {
+		if (x != 0 && y != this.edge && this.minesCoords[y+1][x-1] == 100) {
 			minesCounter++;
 		}
-		if (x != 9 && y != 9 && this.minesCoords[y+1][x+1] == 100) {
+		if (x != 9 && y != this.edge && this.minesCoords[y+1][x+1] == 100) {
 			minesCounter++;
 		}
 		
 		return minesCounter;
+	}
+	
+	public int revealEmptyCells(int x, int y) {
+		
+		int cleanCells = 0;
+		
+		
+
+		if (this.minesCoords[y][x] == 0) {
+			cleanCells++;
+		}
+		if (x != 0 && this.minesCoords[y][x-1] == 0) {
+			cleanCells++;
+		}
+		if (x != 9 && this.minesCoords[y][x+1] == 0) {
+			cleanCells++;
+		}
+		if (y != 0 && this.minesCoords[y-1][x] == 0) {
+			cleanCells++;
+		}
+		if (x != 0  && y != 0 && this.minesCoords[y-1][x-1] == 0) {
+			cleanCells++;
+		}
+		if (x != 9  && y != 0 && this.minesCoords[y-1][x+1] == 0) {
+			cleanCells++;
+		}
+		if (y != 9 && this.minesCoords[y+1][x] == 0) {
+			cleanCells++;
+		}
+		if (x != 0 && y != 9 && this.minesCoords[y+1][x-1] == 0) {
+			cleanCells++;
+		}
+		if (x != 9 && y != 9 && this.minesCoords[y+1][x+1] == 0) {
+			cleanCells++;
+		}
+		
+		return cleanCells;
 	}
 
 }

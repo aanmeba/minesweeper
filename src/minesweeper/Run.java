@@ -8,10 +8,11 @@ public class Run {
 	private boolean isGameRunning;
 	public boolean isMine;
 	private Board gameBoard;
+	private Validation validation;
 	
 	Run() {
 		this.isGameRunning = true;
-		gameBoard = new Board(); 
+//		gameBoard = new Board(); 
 	}
 	
 	public boolean getIsGameRunning() {
@@ -35,8 +36,9 @@ public class Run {
 		while (true) {
 			System.out.printf("Please enter your %s coordinate\n", xy);
 			coord = scanner.nextInt();
-			boolean validInput = Validation.validateInputRange(coord);
-			Validation.printValidationMessage();
+			coord -= 1;
+			boolean validInput = validation.validateInputRange(coord);
+			validation.printValidationMessage();
 			
 			if (validInput) break;
 		}
@@ -47,11 +49,11 @@ public class Run {
 		int option;
 		
 		while (true) {
-			System.out.println("Want to select coordinates -- enter 1");
-			System.out.println("Want to select a flag -- enter 2");
+			System.out.println("Want to select coordinates -- 1");
+			System.out.println("Want to select a flag      -- 2");
 			option = scanner.nextInt();
-			boolean validInput = Validation.validateOption(option);
-			Validation.printValidationMessage();
+			boolean validInput = validation.validateOption(option);
+			validation.printValidationMessage();
 			this.lineBreaker();
 			
 			if (validInput) break;
@@ -59,12 +61,32 @@ public class Run {
 		return option;
 	}
 	
+	public int getBoardSize(Scanner scanner) {
+		int boardSize;
+		
+		while (true) {
+			System.out.println("Enter the board size you want between 10 and 15");
+			boardSize = scanner.nextInt();
+			validation = new Validation(boardSize);
+			
+			boolean validInput = validation.validateSizeRange(boardSize);
+			validation.printValidationMessage();
+			
+			if (validInput) break;
+		}
+		return boardSize;
+	}
+	
 	
 	
 	public void runGame() {
 		printTitle("Minesweeper");
-		gameBoard.printBoard(false, false);
 		Scanner scanner = new Scanner(System.in);
+		
+		int boardSize = this.getBoardSize(scanner);
+		gameBoard = new Board(boardSize);
+		
+		gameBoard.printBoard(false, false);
 		
 		while (this.isGameRunning) {
 			
@@ -74,15 +96,15 @@ public class Run {
 				
 				boolean isFlag = (option == 1) ? false : true;
 				
-				int coordX = getCoordinateInput('x', scanner);
-				int coordY = getCoordinateInput('y', scanner);
+				int coordX = this.getCoordinateInput('x', scanner);
+				int coordY = this.getCoordinateInput('y', scanner);
 								
-				if (Validation.isValid) {
-					Validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY);
+				if (validation.getIsValid()) {
+					validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY);
 				}
 				
 				
-				if (Validation.isValid) {
+				if (validation.getIsValid()) {
 					isMine = gameBoard.isMine(coordX, coordY);
 					
 					if (isMine) {
@@ -92,6 +114,10 @@ public class Run {
 					} else {
 						this.lineBreaker();
 						int num = gameBoard.findNeighbour(coordX, coordY);
+						if (num == 0) {
+//							int cleanCells = gameBoard.revealEmptyCells(coordX, coordY);
+//							System.out.printf("clean cells: %d", cleanCells);
+						}
 						gameBoard.placeWhat(coordX, coordY, num, isFlag);
 						gameBoard.printBoard(isMine, isFlag);	
 					}
