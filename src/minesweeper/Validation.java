@@ -1,12 +1,12 @@
 package minesweeper;
 
-public class Validation {
+public class Validation extends Minesweeper {
 
-	private final int minBoardSize = 5;
+//	private final int minBoardSize = 5;
+//	private int maxIndex;
+//	private int maxBoardSize = 15;
+//	public boolean isMine;
 	private boolean isValid;
-	private int maxIndex;
-	private int maxBoardSize = 15;
-	public boolean isMine;
 	
 	
 	public Validation(int boardSize) {
@@ -15,6 +15,10 @@ public class Validation {
 	
 	public boolean getIsValid() {
 		return this.isValid;
+	}
+	
+	public boolean getIsMine() {
+		return this.isMine;
 	}
 
 	public boolean validateInputRange(int inputNum) {
@@ -52,9 +56,8 @@ public class Validation {
 	
 	public void checkDuplication(int[][] array, int x, int y) {
 		if (array[y][x] != 0) {
-			
-				System.out.println("You've already used that. Please enter a different integer.");
-				isValid = false;
+			System.out.println("You've already used that. Please enter a different integer.");
+			isValid = false;
 			
 		} else {
 			isValid = true;

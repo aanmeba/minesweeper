@@ -3,11 +3,10 @@ package minesweeper;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-// gird class to render grid every time with numbers
-public class Board {
-//	private final int num = 10;
-	private final int boardSize;
-	private final int maxIndex;
+public class Board extends Minesweeper {
+
+//	private final int boardSize;
+//	private final int maxIndex;
 	private int minesCount;
 	private int flagsCount = 0;
 	
@@ -19,16 +18,15 @@ public class Board {
 	
 	private int[][] minesCoords;
 	private int[][] gameBoard;
-//	private boolean[][] revealed;
 	
 	Board(int boardSize) {
+		
 		this.boardSize = boardSize;
 		this.maxIndex = this.boardSize - 1;
 		
 		this.setDifficulty();
 		this.minesCoords = new int[this.boardSize][this.boardSize];
 		this.gameBoard = new int[this.boardSize][this.boardSize];
-//		this.revealed = new boolean[this.boardSize][this.boardSize];
 		this.generateMinesCoords();
 		
 	}
@@ -82,7 +80,7 @@ public class Board {
 			}
 		}	
 		
-		System.out.printf("create mines: %d *****\n", bombCounter);
+		System.out.printf("--- %d Mines Hidden ---\n", bombCounter);
 	}
 	
 	// getter
@@ -142,7 +140,7 @@ public class Board {
 	
 	public String printLine() {
 		String lines = "";
-		for (int i=0; i<(this.boardSize * 3.6); i++ ) {
+		for (int i=0; i<(this.boardSize * 5); i++ ) {
 			lines += "-";
 		}
 		return lines;
@@ -159,9 +157,7 @@ public class Board {
 		}
 		return columns;
 	}
-	
-
-	
+		
 	
 	public void printGameBoard(int[][] array, int num) {
 		char mark = (num == 100) ? '*' :  '0' ;

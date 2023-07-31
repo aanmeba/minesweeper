@@ -3,10 +3,10 @@ package minesweeper;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Run {
+public class Run extends Minesweeper {
 	
+//	public boolean isMine;
 	private boolean isGameRunning;
-	public boolean isMine;
 	private Board gameBoard;
 	private Validation validation;
 	private boolean isHacked = true;
@@ -14,7 +14,6 @@ public class Run {
 	
 	Run() {
 		this.isGameRunning = true;
-//		gameBoard = new Board(); 
 	}
 	
 	public boolean getIsGameRunning() {
@@ -30,6 +29,10 @@ public class Run {
 		System.out.println("=======================================");
 		System.out.printf("************* %s *************\n", message);
 		System.out.println("=======================================");
+	}
+	
+	public void printIndicator(String message) {
+		System.out.printf("# %s :\n", message);
 	}
 	
 	public int getCoordinateInput(char xy, Scanner scanner) {
@@ -55,7 +58,7 @@ public class Run {
 			option = scanner.nextInt();
 			boolean validInput = validation.validateOption(option);
 			validation.printValidationMessage();
-			this.lineBreaker();
+			this.lineBreaker(2);
 			
 			if (validInput) break;
 		}
@@ -66,7 +69,8 @@ public class Run {
 		int boardSize;
 		
 		while (true) {
-			System.out.println("Enter the board size you want between 10 and 15");
+			System.out.printf("Enter the board size you want between %d and %d\n", 
+					this.minBoardSize, this.maxBoardSize);
 			boardSize = scanner.nextInt();
 			validation = new Validation(boardSize);
 			
@@ -83,7 +87,8 @@ public class Run {
 		
 		while (true) {
 			
-			System.out.println("Do you want to play the game with hack version? \nY/y for yes, N/n for no");
+			System.out.println("Play with hack version?\n"
+					+ "Y/y for Yes, N/n for No");
 			String answer = scanner.nextLine();
 			
 			boolean validInput = validation.checkYesOrNo(answer);
@@ -96,23 +101,29 @@ public class Run {
 	
 	
 	public void runGame() {
-		printTitle("Minesweeper");
+		this.printTitle("Minesweeper");
+		this.getInstruction();
 		Scanner scanner = new Scanner(System.in);
 		
 		int boardSize = this.getBoardSize(scanner);
 		gameBoard = new Board(boardSize);
+		this.lineBreaker(2);
+		
 		isHacked = runGameWithHack(scanner);
 		
+		this.printTitle("Let's Start!");
+		this.printIndicator("Your board");
 		// print an empty board
 		gameBoard.printBoard(false, false);			
 		
 		while (this.isGameRunning) {
 			if (isHacked) {
+				this.printIndicator("Your hacked board");
 				gameBoard.printBoard(true, false);
 			}
 			
 			try {
-				this.lineBreaker();
+				this.lineBreaker(2);
 				int option = getFlagOrNum(scanner);
 				
 				boolean isFlag = (option == 1) ? false : true;
@@ -129,7 +140,10 @@ public class Run {
 				}
 				
 				if (isFlag) {
-					flagToNum = validation.removeFlag(gameBoard.getGameBoard(), gameBoard.getMinesCoords(), coordX, coordY, isFlag);
+					flagToNum = validation.removeFlag(
+							gameBoard.getGameBoard(), 
+							gameBoard.getMinesCoords(), 
+							coordX, coordY, isFlag);
 					System.out.printf("isFlag is turn into %b  -> %b! now \n", isFlag, flagToNum);
 				}
 				
@@ -142,7 +156,7 @@ public class Run {
 						this.finishGame();
 						printTitle(" Game Over ");
 					} else {
-						this.lineBreaker();
+						this.lineBreaker(2);
 						int num = gameBoard.findNeighbour(coordX, coordY);
 						
 						
@@ -161,7 +175,7 @@ public class Run {
 						// if isMine is true -> return true (no matter value of validation.isMine)
 						// if isMine is false && validation.isMine is true -> return true
 						// if isMine is false && validation.isMine is false -> return false
-						boolean isStillMine = !isMine ? validation.isMine : isMine;
+						boolean isStillMine = !isMine ? validation.getIsMine() : isMine;
 						
 						if (isStillMine) {
 							gameBoard.printBoard(isStillMine, isFlag);
@@ -171,6 +185,7 @@ public class Run {
 						}
 						
 						gameBoard.placeWhat(coordX, coordY, num, toggleFlag);
+						this.printIndicator("Your board");
 						gameBoard.printBoard(isMine, toggleFlag);
 						if (gameBoard.getMinesCount() == gameBoard.getFlagsCount()) {
 							System.out.println("mines == flags!! ");
@@ -191,28 +206,33 @@ public class Run {
 		}
 		scanner.close();
 	}
-	
-	public void clearConsole() {
-//		System.out.print("\033[H\033[2J");
-//		System.out.flush();
-	}
-	
-	public void lineBreaker() {
-		System.out.println();
-		System.out.println();
+		
+	public void lineBreaker(int num) {
+		for (int i=0; i<num; i++) {
+			System.out.println();			
+		}
 	}
 	
 	public void getInstruction() {
-		System.out.println("How to play:");
-		System.out.println("");
-//		Your task is to find and flag all 10 hidden mines on the board without touching them.
-//		The game board consists of a 10x10 grid, and each cell is represented by an (x, y) coordinate.
-//		To play, enter the x and y coordinates separately when prompted, following the instructions.
-//		Only enter numbers between 0 and 9 for each coordinate. For example, if you want to choose the cell at (3, 5), enter 3 as the x-coordinate and 5 as the y-coordinate.
-//		Be cautious! If you accidentally choose a cell with a hidden mine, the game will be over.
-//		The game ends when you successfully flag all 10 mines or when you trigger a mine by selecting a cell with one.
-		
-		// if you enter a coordinate that was already set as a flag, you can reveal it once you...
+		this.lineBreaker(1);
+		System.out.println("------------------- Game Instructions -------------------");
+		System.out.println("How to Set Up Your Game:");
+		System.out.printf("1. Choose your board size between %d and %d\n", this.minBoardSize, this.maxBoardSize);
+		System.out.println(" - The number of mines will vary based on your board size");
+		System.out.println(" - The number of hidden mines will be revealed once you enter the board size");
+		System.out.println("2. Select the play mode with or without the \"hacked\" version.");
+		System.out.println(" - The hacked version shows you the locations of all the mines!");
+		this.lineBreaker(1);
+		System.out.println("How to Play:");
+		System.out.println("1. Enter \"1\" to select coordinates or \"2\" to place a flag");
+		System.out.println("2. Input the x and y coordinates separately when prompted");
+		System.out.println("3. If you choose to place a flag (option \"2\"), the cell will be marked as \"@\" and protected");
+		System.out.println("4. To reveal a flagged cell, enter the same coordinates again");
+		System.out.println("5. If you select a cell with a hidden mine, the game will be over");
+		System.out.println("6. Continue playing until you find all the hidden mines by placing flags");
+		System.out.println("---------------------------------------------------------");
+		this.lineBreaker(2);
+
 	}
 
 }
