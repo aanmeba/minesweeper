@@ -10,11 +10,6 @@ public class Main {
 		Run game = new Run();
 		game.runGame();
 		
-		// clear screen
-		// print the board before the first dialog
-
-		// win the game
-		// cancel flag - if the coords are in flag -> reveal the num
 	}
 
 }

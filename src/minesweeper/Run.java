@@ -40,11 +40,19 @@ public class Run extends Minesweeper {
 		
 		while (true) {
 			System.out.printf("Please enter your %s coordinate\n", xy);
-			coord = scanner.nextInt();
-			boolean validInput = validation.validateInputRange(coord);
-			validation.printValidationMessage();
-			
-			if (validInput) break;
+			try {
+				
+				coord = scanner.nextInt();
+				boolean validInput = validation.validateInputRange(coord);
+				validation.printValidationMessage();
+				
+				if (validInput) break;
+			} catch(InputMismatchException e) {
+				 // catch other input type
+	            System.out.println("Invalid input. Please enter a valid integer.");
+	            scanner.nextLine(); // consume the invalid input
+			}
+		
 		}
 		return coord;
 	}
@@ -55,12 +63,19 @@ public class Run extends Minesweeper {
 		while (true) {
 			System.out.println("Options:\n1. Select coordinates\n2. Place a flag\n");
 
-			option = scanner.nextInt();
-			boolean validInput = validation.validateOption(option);
-			validation.printValidationMessage();
-			this.lineBreaker(2);
+			try {
+				option = scanner.nextInt();
+				boolean validInput = validation.validateOption(option);
+				validation.printValidationMessage();
+				this.lineBreaker(2);
 			
-			if (validInput) break;
+				if (validInput) break;
+			} catch(InputMismatchException e) {
+				 // catch other input type
+	            System.out.println("Invalid input. Please enter a valid integer.");
+	            scanner.nextLine(); // consume the invalid input
+			}
+				
 		}
 		return option;
 	}
@@ -71,13 +86,19 @@ public class Run extends Minesweeper {
 		while (true) {
 			System.out.printf("Enter the board size you want between %d and %d\n", 
 					this.minBoardSize, this.maxBoardSize);
-			boardSize = scanner.nextInt();
-			validation = new Validation(boardSize);
-			
-			boolean validInput = validation.validateSizeRange(boardSize);
-			validation.printValidationMessage();
-			
-			if (validInput) break;
+			try {
+				boardSize = scanner.nextInt();
+				validation = new Validation(boardSize);
+				
+				boolean validInput = validation.validateSizeRange(boardSize);
+				validation.printValidationMessage();
+				
+				if (validInput) break;
+			 } catch(InputMismatchException e) {
+				 // catch other input type
+	            System.out.println("Invalid input. Please enter a valid integer.");
+	            scanner.nextLine(); // consume the invalid input
+			 }
 		}
 		return boardSize;
 	}
@@ -116,11 +137,13 @@ public class Run extends Minesweeper {
 		// print an empty board
 		gameBoard.printBoard(false, false);			
 		
+		if (isHacked) {
+			this.printIndicator("Your hacked board");
+			gameBoard.printBoard(true, false);
+		}
+		
 		while (this.isGameRunning) {
-			if (isHacked) {
-				this.printIndicator("Your hacked board");
-				gameBoard.printBoard(true, false);
-			}
+			
 			
 			try {
 				this.lineBreaker(2);
@@ -131,20 +154,19 @@ public class Run extends Minesweeper {
 				
 				int coordX = this.getCoordinateInput('x', scanner);
 				int coordY = this.getCoordinateInput('y', scanner);
-				System.out.printf("coordX %d, coordY %d\n", coordX, coordY);
 								
 				if (validation.getIsValid()) {
-					// set isValid value
+					// set isValid value in the Validation class
 					validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY);
 					
 				}
+				
 				
 				if (isFlag) {
 					flagToNum = validation.removeFlag(
 							gameBoard.getGameBoard(), 
 							gameBoard.getMinesCoords(), 
 							coordX, coordY, isFlag);
-					System.out.printf("isFlag is turn into %b  -> %b! now \n", isFlag, flagToNum);
 				}
 				
 				
@@ -158,12 +180,6 @@ public class Run extends Minesweeper {
 					} else {
 						this.lineBreaker(2);
 						int num = gameBoard.findNeighbour(coordX, coordY);
-						
-						
-						// if isFlag is true && flagToNum is true -> return false
-						// if isFlag is true && flagToNum is false -> return true	
-						// if isFlag is false && flagToNum is false -> return false
-						// if isFlag is false && flagToNum is true -> return false
 						
 						// flagToNum is true -> want to remove the flag -> return false to render number
 						// t && !t -> f
@@ -187,6 +203,12 @@ public class Run extends Minesweeper {
 						gameBoard.placeWhat(coordX, coordY, num, toggleFlag);
 						this.printIndicator("Your board");
 						gameBoard.printBoard(isMine, toggleFlag);
+						if (isHacked) {
+							this.printIndicator("Your hacked board");
+							gameBoard.printBoard(true, false);
+						}
+						
+						// to win the game, player has to place flags
 						if (gameBoard.getMinesCount() == gameBoard.getFlagsCount()) {
 							System.out.println("mines == flags!! ");
 							playerWon = gameBoard.hasWon();

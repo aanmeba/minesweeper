@@ -5,15 +5,13 @@ import java.util.Arrays;
 
 public class Board extends Minesweeper {
 
-//	private final int boardSize;
-//	private final int maxIndex;
 	private int minesCount;
 	private int flagsCount = 0;
 	
-	/**
-	 * mines will be 100
-	 * revealed numbers will be 99
-	 * flags will be 88
+	/** LEGEND for boards **
+	 * mines -> 100
+	 * revealed numbers -> 99
+	 * flags -> 88
 	 * */
 	
 	private int[][] minesCoords;
@@ -114,7 +112,7 @@ public class Board extends Minesweeper {
 		} else {
 			
 			if (num == 0) {
-				// if the selected coord has 0 mine -> 99
+				// if the selected coords has no (0) mine -> set 99
 				// since the empty element is 0 
 				this.gameBoard[y][x] = 99;
 			} else {
@@ -204,8 +202,7 @@ public class Board extends Minesweeper {
 	public boolean hasWon () {
 		String results = "";
 		
-		System.out.printf("flags: %d, mines: %d \n", this.flagsCount, this.minesCount);
-		
+		// if the number of flags == the number of mines
 		// loop the board and check they are placed in the same positions
 		for (int i=0; i<this.boardSize; i++) {
 			for (int j=0; j<this.boardSize; j++) {
@@ -217,7 +214,6 @@ public class Board extends Minesweeper {
 					}
 				}		
 			}
-			System.out.println(results);
 		}
 		return results != "";
 	}
@@ -232,6 +228,7 @@ public class Board extends Minesweeper {
 		// move the 9 cells each of below
 		int minesCounter = 0;
 		
+		// -1 to 1 based on x & y
 		for (int offsetX=-1; offsetX<=1; offsetX++) {
 			for (int offsetY=-1; offsetY<=1; offsetY++) {
 				if (this.outOfBounds(x + offsetX, y + offsetY)) continue;
@@ -241,34 +238,6 @@ public class Board extends Minesweeper {
 				}					
 			}
 		}
-
-//		if (this.minesCoords[y][x] == 100) {
-//			minesCounter++;
-//		}
-//		if (x != 0 && this.minesCoords[y][x-1] == 100) {
-//			minesCounter++;
-//		}
-//		if (x != this.maxIndex && this.minesCoords[y][x+1] == 100) {
-//			minesCounter++;
-//		}
-//		if (y != 0 && this.minesCoords[y-1][x] == 100) {
-//			minesCounter++;
-//		}
-//		if (x != 0  && y != 0 && this.minesCoords[y-1][x-1] == 100) {
-//			minesCounter++;
-//		}
-//		if (x != this.maxIndex  && y != 0 && this.minesCoords[y-1][x+1] == 100) {
-//			minesCounter++;
-//		}
-//		if (y != this.maxIndex && this.minesCoords[y+1][x] == 100) {
-//			minesCounter++;
-//		}
-//		if (x != 0 && y != this.maxIndex && this.minesCoords[y+1][x-1] == 100) {
-//			minesCounter++;
-//		}
-//		if (x != this.maxIndex && y != this.maxIndex && this.minesCoords[y+1][x+1] == 100) {
-//			minesCounter++;
-//		}
 		
 		return minesCounter;
 	}
