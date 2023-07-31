@@ -2,12 +2,13 @@ package minesweeper;
 
 public class Validation {
 
+	private final int minBoardSize = 5;
 	private boolean isValid;
-	private int boardSize;
+	private int maxIndex;
 	private int maxBoardSize = 15;
 	
 	public Validation(int boardSize) {
-		this.boardSize = boardSize;
+		this.maxIndex = boardSize - 1;
 	}
 	
 	public boolean getIsValid() {
@@ -15,7 +16,7 @@ public class Validation {
 	}
 
 	public boolean validateInputRange(int inputNum) {
-		if (inputNum >= this.boardSize || inputNum < 0) {
+		if (inputNum > this.maxIndex || inputNum < 0) {
 			isValid = false;
 		} else {			
 			isValid = true;
@@ -24,7 +25,7 @@ public class Validation {
 	}
 	
 	public boolean validateSizeRange(int inputNum) {
-		if (inputNum >= 10 && inputNum <= this.maxBoardSize) {
+		if (inputNum >= this.minBoardSize && inputNum <= this.maxBoardSize) {
 			isValid = true;
 		} else {			
 			isValid = false;
@@ -48,7 +49,6 @@ public class Validation {
 	}
 	
 	public void checkDuplication(int[][] array, int x, int y) {
-		
 		if (array[y][x] != 0) {
 			System.out.println("You've already used that. Please enter a different integer.");
 			isValid = false;

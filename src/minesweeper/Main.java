@@ -13,6 +13,8 @@ public class Main {
 		// clear screen
 		// print the board before the first dialog
 
+		// win the game
+		// cancel flag - if the coords are in flag -> reveal the num
 	}
 
 }

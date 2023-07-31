@@ -9,6 +9,8 @@ public class Run {
 	public boolean isMine;
 	private Board gameBoard;
 	private Validation validation;
+	private boolean isHacked = true;
+	private boolean playerWon = false;
 	
 	Run() {
 		this.isGameRunning = true;
@@ -36,7 +38,6 @@ public class Run {
 		while (true) {
 			System.out.printf("Please enter your %s coordinate\n", xy);
 			coord = scanner.nextInt();
-			coord -= 1;
 			boolean validInput = validation.validateInputRange(coord);
 			validation.printValidationMessage();
 			
@@ -77,6 +78,9 @@ public class Run {
 		return boardSize;
 	}
 	
+	public void runGameWithHack() {
+		System.out.println();
+	}
 	
 	
 	public void runGame() {
@@ -87,10 +91,17 @@ public class Run {
 		gameBoard = new Board(boardSize);
 		
 		gameBoard.printBoard(false, false);
+		
+		// hacked
+//		System.out.println("Do you want a HACK? Y for Yes, N for No");
+//		char res = scanner.nextLine();
+		
+		
+		
 		System.out.printf("-- You have %d mines --\n", gameBoard.getMinesCount());
 		
 		while (this.isGameRunning) {
-			
+			gameBoard.printBoard(true, isHacked);
 			try {
 				this.lineBreaker();
 				int option = getFlagOrNum(scanner);
@@ -99,6 +110,7 @@ public class Run {
 				
 				int coordX = this.getCoordinateInput('x', scanner);
 				int coordY = this.getCoordinateInput('y', scanner);
+				System.out.printf("coordX %d, coordY %d\n", coordX, coordY);
 								
 				if (validation.getIsValid()) {
 					validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY);
@@ -106,7 +118,7 @@ public class Run {
 				
 				
 				if (validation.getIsValid()) {
-					isMine = gameBoard.isMine(coordX, coordY);
+					isMine = gameBoard.isMine(coordX, coordY, isFlag);
 					
 					if (isMine) {
 						gameBoard.printBoard(isMine, isFlag);
@@ -115,12 +127,25 @@ public class Run {
 					} else {
 						this.lineBreaker();
 						int num = gameBoard.findNeighbour(coordX, coordY);
-						if (num == 0) {
-//							int cleanCells = gameBoard.revealEmptyCells(coordX, coordY);
-//							System.out.printf("clean cells: %d", cleanCells);
-						}
+						
+						// reveal around the 0
+//						if (num == 0) {
+//							gameBoard.revealArea(coordX, coordY);
+//							gameBoard.printBoard2();
+//							gameBoard.printRevealedBoard();
+//						}
+						
 						gameBoard.placeWhat(coordX, coordY, num, isFlag);
-						gameBoard.printBoard(isMine, isFlag);	
+						gameBoard.printBoard(isMine, isFlag);
+						if (gameBoard.getMinesCount() == gameBoard.getFlagsCount()) {
+							System.out.println("mines == flags!! ");
+							playerWon = gameBoard.hasWon();
+						}
+						
+						if (playerWon) {
+							this.printTitle("YOU WON!!");
+							this.finishGame();
+						}
 					}
 				}
 			} catch (InputMismatchException e) {
