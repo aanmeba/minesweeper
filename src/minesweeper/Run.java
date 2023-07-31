@@ -113,7 +113,9 @@ public class Run {
 				System.out.printf("coordX %d, coordY %d\n", coordX, coordY);
 								
 				if (validation.getIsValid()) {
-					validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY);
+					// set isValid value
+					isFlag = validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY, isFlag);
+					System.out.printf("isFlag is turn into %b! now \n", isFlag);
 				}
 				
 				

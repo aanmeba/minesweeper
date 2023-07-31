@@ -48,14 +48,21 @@ public class Validation {
 		}
 	}
 	
-	public void checkDuplication(int[][] array, int x, int y) {
+	public boolean checkDuplication(int[][] array, int x, int y, boolean isFlag) {
 		if (array[y][x] != 0) {
-			System.out.println("You've already used that. Please enter a different integer.");
-			isValid = false;
+			if (!isFlag) {
+				System.out.println("You've already used that. Please enter a different integer.");
+				isValid = false;
+			} else {
+				System.out.println("It was flagged coordinates. You can now reveal it.");
+				array[y][x] = 0;
+				isValid = true;
+				return false;
+			}
 		} else {
 			isValid = true;
 		}
-		
+		return true;
 	}
 	
 	
