@@ -50,8 +50,8 @@ public class Run {
 		int option;
 		
 		while (true) {
-			System.out.println("Want to select coordinates -- 1");
-			System.out.println("Want to select a flag      -- 2");
+			System.out.println("Options:\n1. Select coordinates\n2. Place a flag\n");
+
 			option = scanner.nextInt();
 			boolean validInput = validation.validateOption(option);
 			validation.printValidationMessage();
@@ -78,8 +78,20 @@ public class Run {
 		return boardSize;
 	}
 	
-	public void runGameWithHack() {
-		System.out.println();
+	public boolean runGameWithHack(Scanner scanner) {
+		boolean wantHack = false;
+		
+		while (true) {
+			
+			System.out.println("Do you want to play the game with hack version? \nY/y for yes, N/n for no");
+			String answer = scanner.nextLine();
+			
+			boolean validInput = validation.checkYesOrNo(answer);
+			
+			if (validInput) wantHack = validation.wantHack(answer);
+			if (validInput) break;
+		}		
+		return wantHack;
 	}
 	
 	
@@ -89,24 +101,22 @@ public class Run {
 		
 		int boardSize = this.getBoardSize(scanner);
 		gameBoard = new Board(boardSize);
+		isHacked = runGameWithHack(scanner);
 		
-		gameBoard.printBoard(false, false);
-		
-		// hacked
-//		System.out.println("Do you want a HACK? Y for Yes, N for No");
-//		char res = scanner.nextLine();
-		
-		
-		
-		System.out.printf("-- You have %d mines --\n", gameBoard.getMinesCount());
+		// print an empty board
+		gameBoard.printBoard(false, false);			
 		
 		while (this.isGameRunning) {
-			gameBoard.printBoard(true, isHacked);
+			if (isHacked) {
+				gameBoard.printBoard(true, false);
+			}
+			
 			try {
 				this.lineBreaker();
 				int option = getFlagOrNum(scanner);
 				
 				boolean isFlag = (option == 1) ? false : true;
+				boolean flagToNum = false;
 				
 				int coordX = this.getCoordinateInput('x', scanner);
 				int coordY = this.getCoordinateInput('y', scanner);
@@ -114,15 +124,20 @@ public class Run {
 								
 				if (validation.getIsValid()) {
 					// set isValid value
-					isFlag = validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY, isFlag);
-					System.out.printf("isFlag is turn into %b! now \n", isFlag);
+					validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY);
+					
+				}
+				
+				if (isFlag) {
+					flagToNum = validation.removeFlag(gameBoard.getGameBoard(), gameBoard.getMinesCoords(), coordX, coordY, isFlag);
+					System.out.printf("isFlag is turn into %b  -> %b! now \n", isFlag, flagToNum);
 				}
 				
 				
 				if (validation.getIsValid()) {
 					isMine = gameBoard.isMine(coordX, coordY, isFlag);
 					
-					if (isMine) {
+					if (isMine && !isFlag) {
 						gameBoard.printBoard(isMine, isFlag);
 						this.finishGame();
 						printTitle(" Game Over ");
@@ -130,15 +145,33 @@ public class Run {
 						this.lineBreaker();
 						int num = gameBoard.findNeighbour(coordX, coordY);
 						
-						// reveal around the 0
-//						if (num == 0) {
-//							gameBoard.revealArea(coordX, coordY);
-//							gameBoard.printBoard2();
-//							gameBoard.printRevealedBoard();
-//						}
 						
-						gameBoard.placeWhat(coordX, coordY, num, isFlag);
-						gameBoard.printBoard(isMine, isFlag);
+						// if isFlag is true && flagToNum is true -> return false
+						// if isFlag is true && flagToNum is false -> return true	
+						// if isFlag is false && flagToNum is false -> return false
+						// if isFlag is false && flagToNum is true -> return false
+						
+						// flagToNum is true -> want to remove the flag -> return false to render number
+						// t && !t -> f
+						// t && !f -> t
+						// f && !t -> f
+						// f && !f -> f
+						boolean toggleFlag = (isFlag && !flagToNum);
+						
+						// if isMine is true -> return true (no matter value of validation.isMine)
+						// if isMine is false && validation.isMine is true -> return true
+						// if isMine is false && validation.isMine is false -> return false
+						boolean isStillMine = !isMine ? validation.isMine : isMine;
+						
+						if (isStillMine) {
+							gameBoard.printBoard(isStillMine, isFlag);
+							this.finishGame();
+							printTitle(" Game Over ");
+							break;
+						}
+						
+						gameBoard.placeWhat(coordX, coordY, num, toggleFlag);
+						gameBoard.printBoard(isMine, toggleFlag);
 						if (gameBoard.getMinesCount() == gameBoard.getFlagsCount()) {
 							System.out.println("mines == flags!! ");
 							playerWon = gameBoard.hasWon();
@@ -147,6 +180,7 @@ public class Run {
 						if (playerWon) {
 							this.printTitle("YOU WON!!");
 							this.finishGame();
+							break;
 						}
 					}
 				}
@@ -177,6 +211,8 @@ public class Run {
 //		Only enter numbers between 0 and 9 for each coordinate. For example, if you want to choose the cell at (3, 5), enter 3 as the x-coordinate and 5 as the y-coordinate.
 //		Be cautious! If you accidentally choose a cell with a hidden mine, the game will be over.
 //		The game ends when you successfully flag all 10 mines or when you trigger a mine by selecting a cell with one.
+		
+		// if you enter a coordinate that was already set as a flag, you can reveal it once you...
 	}
 
 }

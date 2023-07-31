@@ -119,7 +119,6 @@ public class Board {
 				// if the selected coord has 0 mine -> 99
 				// since the empty element is 0 
 				this.gameBoard[y][x] = 99;
-//				this.revealed[y][x] = true;
 			} else {
 				this.gameBoard[y][x] = num;
 			}
@@ -137,8 +136,6 @@ public class Board {
 				this.printGameBoard(gameBoard, 88);
 			} else {
 				this.printGameBoard(gameBoard, 99);
-//				this.printBoard2();
-//				this.printRevealedBoard();
 			}
 		}
 	}
@@ -169,8 +166,6 @@ public class Board {
 	public void printGameBoard(int[][] array, int num) {
 		char mark = (num == 100) ? '*' :  '0' ;
 
-		//88 || 99 should be handled together!
-		
 		int index = 0;
 		
 		System.out.println(printLine());
@@ -231,45 +226,11 @@ public class Board {
 		return results != "";
 	}
 	
-//	public void revealArea(int x, int y) {
-//		System.out.printf("x: %d, y: %d\n", x, y);
-//		
-//		if (outOfBounds(x, y)) return;
-//		if (revealed[x][y]) return;
-//		revealed[x][y] = true;
-//		if (findNeighbour(x, y) != 0) return;
-//		revealArea(x-1, y-1);
-//		revealArea(x-1, y);
-//		revealArea(x-1, y+1);
-//		revealArea(x+1, y-1);
-//		revealArea(x+1, y);
-//		revealArea(x+1, y+1);
-//		revealArea(x, y-1);
-//		revealArea(x, y+1);
-//	}
 	
 	public boolean outOfBounds(int x, int y) {
 		return x < 0 || x > this.maxIndex || y < 0 || y > this.maxIndex;
 	}
 	
-//	public void printBoard2() {
-//		 for (int row = 0; row < this.maxIndex; row++) {
-//		        for (int col = 0; col < this.maxIndex; col++) {
-//		            if (revealed[row][col]) {
-//		                // If the cell is revealed, print the actual value from the board array
-//		                if (gameBoard[row][col] == -1) {
-//		                    System.out.print(" * "); // '*' represents a mine
-//		                } else {
-//		                    System.out.print(" " + gameBoard[row][col] + " ");
-//		                }
-//		            } else {
-//		                // If the cell is not revealed, print a symbol (e.g., 'X') to represent it
-//		                System.out.print(" X ");
-//		            }
-//		        }
-//		        System.out.println(); // Move to the next row after each inner loop
-//		    }
-//	}
 	
 	public int findNeighbour(int x, int y) {
 		// move the 9 cells each of below
@@ -282,10 +243,6 @@ public class Board {
 				if (this.minesCoords[y + offsetY][x + offsetX] == 100) {
 					minesCounter++;
 				}					
-//				if (this.gameBoard[y + offsetY][x + offsetX] == 0) {
-//					this.revealArea(x + offsetX, y + offsetY);
-//				}
-//				
 			}
 		}
 
