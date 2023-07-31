@@ -78,7 +78,7 @@ public class Board extends Minesweeper {
 			}
 		}	
 		
-		System.out.printf("--- %d Mines Hidden ---\n", bombCounter);
+		System.out.printf("-- %d Mines Hidden --\n", bombCounter);
 	}
 	
 	// getter

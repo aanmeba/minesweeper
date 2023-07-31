@@ -9,7 +9,7 @@ public class Run extends Minesweeper {
 	private boolean isGameRunning;
 	private Board gameBoard;
 	private Validation validation;
-	private boolean isHacked = true;
+//	private boolean isHacked = true;
 	private boolean playerWon = false;
 	
 	Run() {
@@ -39,7 +39,7 @@ public class Run extends Minesweeper {
 		int coord = 0;
 		
 		while (true) {
-			System.out.printf("Please enter your %s coordinate\n", xy);
+			System.out.printf("=> Please enter your %s coordinate\n", xy);
 			try {
 				
 				coord = scanner.nextInt();
@@ -49,7 +49,7 @@ public class Run extends Minesweeper {
 				if (validInput) break;
 			} catch(InputMismatchException e) {
 				 // catch other input type
-	            System.out.println("Invalid input. Please enter a valid integer.");
+				System.out.println("-- Invalid input. Please enter a valid integer. --");
 	            scanner.nextLine(); // consume the invalid input
 			}
 		
@@ -61,7 +61,7 @@ public class Run extends Minesweeper {
 		int option;
 		
 		while (true) {
-			System.out.println("Options:\n1. Select coordinates\n2. Place a flag\n");
+			System.out.println("=> Options:\n1. Select coordinates\n2. Place a flag\n");
 
 			try {
 				option = scanner.nextInt();
@@ -72,7 +72,7 @@ public class Run extends Minesweeper {
 				if (validInput) break;
 			} catch(InputMismatchException e) {
 				 // catch other input type
-	            System.out.println("Invalid input. Please enter a valid integer.");
+				System.out.println("-- Invalid input. Please enter a valid integer. --");
 	            scanner.nextLine(); // consume the invalid input
 			}
 				
@@ -84,7 +84,7 @@ public class Run extends Minesweeper {
 		int boardSize;
 		
 		while (true) {
-			System.out.printf("Enter the board size you want between %d and %d\n", 
+			System.out.printf("=> Enter the board size you want between %d and %d\n", 
 					this.minBoardSize, this.maxBoardSize);
 			try {
 				boardSize = scanner.nextInt();
@@ -96,7 +96,7 @@ public class Run extends Minesweeper {
 				if (validInput) break;
 			 } catch(InputMismatchException e) {
 				 // catch other input type
-	            System.out.println("Invalid input. Please enter a valid integer.");
+	            System.out.println("-- Invalid input. Please enter a valid integer. --");
 	            scanner.nextLine(); // consume the invalid input
 			 }
 		}
@@ -108,14 +108,15 @@ public class Run extends Minesweeper {
 		
 		while (true) {
 			
-			System.out.println("Play with hack version?\n"
-					+ "Y/y for Yes, N/n for No");
+			// it prints twice, why!?!?
+			System.out.println("=> Play with hack version? (Y/y for Yes, N/n for No)");
 			String answer = scanner.nextLine();
 			
 			boolean validInput = validation.checkYesOrNo(answer);
 			
 			if (validInput) wantHack = validation.wantHack(answer);
 			if (validInput) break;
+
 		}		
 		return wantHack;
 	}
@@ -130,7 +131,7 @@ public class Run extends Minesweeper {
 		gameBoard = new Board(boardSize);
 		this.lineBreaker(2);
 		
-		isHacked = runGameWithHack(scanner);
+		boolean isHacked = this.runGameWithHack(scanner);
 		
 		this.printTitle("Let's Start!");
 		this.printIndicator("Your board");
@@ -222,7 +223,7 @@ public class Run extends Minesweeper {
 					}
 				}
 			} catch (InputMismatchException e) {
-				System.out.println("Invalid input. Please enter a valid integer.");
+				System.out.println("-- Invalid input. Please enter a valid integer. --");
 				scanner.nextLine(); // consume the invalid input
 			}			
 		}

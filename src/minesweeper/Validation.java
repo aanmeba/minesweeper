@@ -49,7 +49,7 @@ public class Validation extends Minesweeper {
 	
 	public void printValidationMessage() {
 		if (isValid != true) {
-			System.out.println("Invalid input. Please enter a valid integer.");
+			System.out.println("-- Invalid input. Please enter a valid integer. --");
 		}
 	}
 	
@@ -63,7 +63,7 @@ public class Validation extends Minesweeper {
 //		}
 		isValid = !(array[y][x] != 0 && array[y][x] != 88);
 		if (!isValid) {
-			System.out.println("You've already used that. Please enter a different integer.");
+			System.out.println("-- You've already used that. Please enter a different integer. --");
 		}
 		
 	}
@@ -71,7 +71,7 @@ public class Validation extends Minesweeper {
 	public boolean removeFlag(int[][] board, int[][] mines, int x, int y, boolean isFlag) {
 		if (board[y][x] == 88 && isFlag) {
 			
-			System.out.println("It was flagged coordinates. You can now reveal it.");
+			System.out.println("-- It was flagged coordinates. You can now reveal it. --");
 			
 			if (mines[y][x] == 100) {
 				this.isMine = true;				
