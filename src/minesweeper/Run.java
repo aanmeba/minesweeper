@@ -5,15 +5,18 @@ import java.util.Scanner;
 
 public class Run extends Minesweeper {
 	
-//	public boolean isMine;
 	private boolean isGameRunning;
 	private Board gameBoard;
 	private Validation validation;
-//	private boolean isHacked = true;
 	private boolean playerWon = false;
+	private boolean isHacked;
 	
 	Run() {
 		this.isGameRunning = true;
+	}
+	Run(String arg) {
+		this.isGameRunning = true;
+		this.isHacked = true;
 	}
 	
 	public boolean getIsGameRunning() {
@@ -102,25 +105,7 @@ public class Run extends Minesweeper {
 		}
 		return boardSize;
 	}
-	
-	public boolean runGameWithHack(Scanner scanner) {
-		boolean wantHack = false;
 		
-		while (true) {
-			
-			// it prints twice, why!?!?
-			System.out.println("=> Play with hack version? (Y/y for Yes, N/n for No)");
-			String answer = scanner.nextLine();
-			
-			boolean validInput = validation.checkYesOrNo(answer);
-			
-			if (validInput) wantHack = validation.wantHack(answer);
-			if (validInput) break;
-
-		}		
-		return wantHack;
-	}
-	
 	
 	public void runGame() {
 		this.printTitle("Minesweeper");
@@ -131,14 +116,13 @@ public class Run extends Minesweeper {
 		gameBoard = new Board(boardSize);
 		this.lineBreaker(2);
 		
-		boolean isHacked = this.runGameWithHack(scanner);
 		
 		this.printTitle("Let's Start!");
 		this.printIndicator("Your board");
 		// print an empty board
 		gameBoard.printBoard(false, false);			
 		
-		if (isHacked) {
+		if (this.isHacked) {
 			this.printIndicator("Your hacked board");
 			gameBoard.printBoard(true, false);
 		}
