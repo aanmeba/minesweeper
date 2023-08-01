@@ -40,3 +40,4 @@ Run the game in hack mode:
 
 [v] Implement a command-line argument feature to upgrade the current hack version.<br />
 [ ] Refactor the `Board` and `Run` classes by breaking down some of the implementation into separate classes.
+[ ] Refactor the marks for flags, revealed cells, mines to improve the readability, currently they are represented as numbers (88, 99, 100) respectively.
