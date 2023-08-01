@@ -1,7 +1,5 @@
 package minesweeper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Board extends Minesweeper {
 
@@ -264,26 +262,26 @@ public class Board extends Minesweeper {
 		return minesCounter;
 	}
 	
-	public boolean removeFlag(Cell[][] board, Cell[][] mines, int x, int y, boolean isFlag) {
-		if (board[y][x].getFlag() && isFlag) {
-			board[y][x].setFlag(false); 
-			this.flagsCount--;
-			
-			System.out.println("-- It was flagged coordinates. You can now reveal it. --");
-			
-			if (mines[y][x].getMine()) {
-				this.isMine = true;				
-			} else {
-				board[y][x].setReveal(true);
-			}
-//			isValid = true;
-		
-			return true;
-		} else {
-			return false;
-		}
-		
-	}
+//	public boolean removeFlag(Cell[][] board, Cell[][] mines, int x, int y, boolean isFlag) {
+//		if (board[y][x].getFlag() && isFlag) {
+//			board[y][x].setFlag(false); 
+//			this.flagsCount--;
+//			
+//			System.out.println("-- It was flagged coordinates. You can now reveal it. --");
+//			
+//			if (mines[y][x].getMine()) {
+//				this.isMine = true;				
+//			} else {
+//				board[y][x].setReveal(true);
+//			}
+////			isValid = true;
+//		
+//			return true;
+//		} else {
+//			return false;
+//		}
+//		
+//	}
 	
 	
 }

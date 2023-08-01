@@ -14,6 +14,7 @@ public class Run extends Minesweeper {
 	Run() {
 		this.isGameRunning = true;
 	}
+	
 	Run(String arg) {
 		this.isGameRunning = true;
 		this.isHacked = true;
@@ -39,12 +40,14 @@ public class Run extends Minesweeper {
 	}
 	
 	public int getCoordinateInput(char xy, Scanner scanner) {
+		
+//		return validation.validateInputs("coordinate", scanner, validation::validateInputRange, xy);
 		int coord = 0;
 		
 		while (true) {
 			System.out.printf("=> Please enter your %s coordinate\n", xy);
+			
 			try {
-				
 				coord = scanner.nextInt();
 				boolean validInput = validation.validateInputRange(coord);
 				validation.printValidationMessage();
@@ -61,6 +64,7 @@ public class Run extends Minesweeper {
 	}
 	
 	public int getFlagOrNum(Scanner scanner) {
+//		return validation.validateInputs("option", scanner, validation::validateOption);
 		int option;
 		
 		while (true) {
@@ -84,16 +88,19 @@ public class Run extends Minesweeper {
 	}
 	
 	public int getBoardSize(Scanner scanner) {
-		int boardSize;
+		
+//		return validation.validateInputs("boardSize", scanner, validation::validateSizeRange);
+		
+		int size;
 		
 		while (true) {
 			System.out.printf("=> Enter the board size you want between %d and %d\n", 
 					this.minBoardSize, this.maxBoardSize);
 			try {
-				boardSize = scanner.nextInt();
-				validation = new Validation(boardSize);
+				size = scanner.nextInt();
+				validation = new Validation(size);
 				
-				boolean validInput = validation.validateSizeRange(boardSize);
+				boolean validInput = validation.validateSizeRange(size);
 				validation.printValidationMessage();
 				
 				if (validInput) break;
@@ -103,7 +110,7 @@ public class Run extends Minesweeper {
 	            scanner.nextLine(); // consume the invalid input
 			 }
 		}
-		return boardSize;
+		return size;
 	}
 		
 	
@@ -148,10 +155,11 @@ public class Run extends Minesweeper {
 				
 				
 				if (isFlag) {
-					flagToNum = gameBoard.removeFlag(
+					flagToNum = validation.removeFlag(
 							gameBoard.getGameBoard(), 
 							gameBoard.getMinesCoords(), 
 							coordX, coordY, isFlag);
+					if (flagToNum) gameBoard.setFlagsCount();
 				}
 				
 				
@@ -194,8 +202,8 @@ public class Run extends Minesweeper {
 						}
 						
 						// to win the game, player has to place flags
+						System.out.printf("mines %d == flags!! %d\n", gameBoard.getMinesCount(), gameBoard.getFlagsCount());
 						if (gameBoard.getMinesCount() == gameBoard.getFlagsCount()) {
-							System.out.printf("mines %d == flags!! %d\n", gameBoard.getMinesCount(), gameBoard.getMinesCount());
 							playerWon = gameBoard.hasWon();
 						}
 						
