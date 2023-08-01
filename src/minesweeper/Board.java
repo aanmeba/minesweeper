@@ -7,6 +7,7 @@ public class Board extends Minesweeper {
 
 	private int minesCount;
 	private int flagsCount = 0;
+		
 	
 	/** LEGEND for boards **
 	 * mines -> 100
@@ -14,8 +15,10 @@ public class Board extends Minesweeper {
 	 * flags -> 88
 	 * */
 	
-	private int[][] minesCoords;
-	private int[][] gameBoard;
+	private Cell[][] minesCoords;
+	private Cell[][] gameBoard;
+//	private int[][] minesCoords;
+//	private int[][] gameBoard;
 	
 	Board(int boardSize) {
 		
@@ -23,8 +26,16 @@ public class Board extends Minesweeper {
 		this.maxIndex = this.boardSize - 1;
 		
 		this.setDifficulty();
-		this.minesCoords = new int[this.boardSize][this.boardSize];
-		this.gameBoard = new int[this.boardSize][this.boardSize];
+		this.minesCoords = new Cell[this.boardSize][this.boardSize];
+		this.gameBoard = new Cell[this.boardSize][this.boardSize];
+		
+		for (int x=0; x<this.boardSize; x++) {
+			for (int y=0; y<this.boardSize; y++) {
+				this.minesCoords[y][x] = new Cell();
+				this.gameBoard[y][x] = new Cell();
+			}
+		}
+		
 		this.generateMinesCoords();
 		
 	}
@@ -70,8 +81,10 @@ public class Board extends Minesweeper {
 			int y = getRandomNum();
 			
 			// mark the bomb on the board
-			if (this.minesCoords[y][x] != 100) {
-				this.minesCoords[y][x] = 100;
+			if (!this.minesCoords[y][x].getMine()) {
+				this.minesCoords[y][x].setMine(true);
+				this.minesCoords[y][x].setReveal(true); // can I use setReveal for mines baord?
+				System.out.printf("y: %d, x: %d\n", y, x);
 				bombCounter ++;
 			} else {
 				continue;
@@ -82,11 +95,11 @@ public class Board extends Minesweeper {
 	}
 	
 	// getter
-	public int[][] getMinesCoords() {
+	public Cell[][] getMinesCoords() {
 		return this.minesCoords;
 	}
 	
-	public int[][] getGameBoard() {
+	public Cell[][] getGameBoard() {
 		return this.gameBoard;
 	}
 	
@@ -98,25 +111,32 @@ public class Board extends Minesweeper {
 		return this.flagsCount;
 	}
 	
+	public void setFlagsCount() {
+		this.flagsCount--;
+	}
+	
 	public boolean isMine (int x, int y, boolean isFlag) {
 		if (isFlag) return false;
-		if (this.minesCoords[y][x] != 100) {			
-			return false;
-		}
-		return true;		
+		return this.minesCoords[y][x].getMine();
+//		if (!this.minesCoords[y][x].getMine()) {			
+//			return false;
+//		}
+//		return true;		
 	}
 	
 	public void placeWhat(int x, int y, int num, boolean isFlag) {
 		if (isFlag) {
-			this.gameBoard[y][x] = 88;
+			this.gameBoard[y][x].setFlag(isFlag);;
+			this.gameBoard[y][x].setReveal(true);;
 		} else {
 			
 			if (num == 0) {
 				// if the selected coords has no (0) mine -> set 99
 				// since the empty element is 0 
-				this.gameBoard[y][x] = 99;
+				this.gameBoard[y][x].setReveal(true);;
 			} else {
-				this.gameBoard[y][x] = num;
+				this.gameBoard[y][x].setNeighbour(num);
+				this.gameBoard[y][x].setReveal(true);;
 			}
 		}
 	}
@@ -125,13 +145,13 @@ public class Board extends Minesweeper {
 	public void printBoard(boolean isMine, boolean isFlag) {
 		if (isMine) {
 			// game done - print a board with mines
-			this.printGameBoard(minesCoords, 100);
+			this.printGameBoard(minesCoords, "mine"); // mine 100
 		} else {
 			if (isFlag) {
 				this.flagsCount++;
-				this.printGameBoard(gameBoard, 88);
+				this.printGameBoard(gameBoard, "flag"); // flag 88
 			} else {
-				this.printGameBoard(gameBoard, 99);
+				this.printGameBoard(gameBoard, "reveal"); // reveal 99
 			}
 		}
 	}
@@ -157,37 +177,39 @@ public class Board extends Minesweeper {
 	}
 		
 	
-	public void printGameBoard(int[][] array, int num) {
-		char mark = (num == 100) ? '*' :  '0' ;
+	public void printGameBoard(Cell[][] array, String type) {
+		char mark = (type == "mine") ? '*' :  '0' ;
+		// num -> 88, 99, 100 // mark -> 99 OR 100
 
 		int index = 0;
 		
 		System.out.println(printLine());
 		System.out.println(printColumnNums());
 		
-		for (int[] row: array) {
+		for (Cell[] row: array) {
 			if (index < 10) {
 				System.out.printf("  %d    |", index);
 			} else {
 				System.out.printf(" %d    |", index);
 			}
-			for (int cell:row) {
-				if (cell == 0) {
+			for (Cell dot:row) {
+				
+				if (!dot.getReveal()) { // 99
 					System.out.printf(" ");
-				} else if (cell == num) {
-					if (cell == 88) {
+					
+				} else if (dot.getFlag() || dot.getMine()) {
+					if (dot.getFlag()) { // 88 || 100
 						System.out.printf("%s", '@');						
-					} else {
-						
-						System.out.printf("%s", mark);						
+					} else {	
+						System.out.printf("%s", mark);	// *?					
 					}
 				} else {	
-					if (cell == 88) {
+					if (dot.getFlag()) {
 						System.out.printf("%s", '@');						
-					} else if (cell == 99) {
+					} else if (dot.getNeighbour() == 0) {
 						System.out.printf("%s", '0');
 					} else {
-						System.out.printf("%d", cell);						
+						System.out.printf("%d", dot.getNeighbour()); // already revealed					
 					}
 				}
 				System.out.printf(" |");
@@ -206,8 +228,8 @@ public class Board extends Minesweeper {
 		// loop the board and check they are placed in the same positions
 		for (int i=0; i<this.boardSize; i++) {
 			for (int j=0; j<this.boardSize; j++) {
-				if (this.gameBoard[i][j] == 88) {
-					if (this.minesCoords[i][j] == 100) {
+				if (this.gameBoard[i][j].getFlag()) {
+					if (this.minesCoords[i][j].getMine()) {
 						results += "t";
 					} else {
 						results = "";
@@ -233,13 +255,34 @@ public class Board extends Minesweeper {
 			for (int offsetY=-1; offsetY<=1; offsetY++) {
 				if (this.outOfBounds(x + offsetX, y + offsetY)) continue;
 				
-				if (this.minesCoords[y + offsetY][x + offsetX] == 100) {
+				if (this.minesCoords[y + offsetY][x + offsetX].getMine()) {
 					minesCounter++;
 				}					
 			}
 		}
 		
 		return minesCounter;
+	}
+	
+	public boolean removeFlag(Cell[][] board, Cell[][] mines, int x, int y, boolean isFlag) {
+		if (board[y][x].getFlag() && isFlag) {
+			board[y][x].setFlag(false); 
+			this.flagsCount--;
+			
+			System.out.println("-- It was flagged coordinates. You can now reveal it. --");
+			
+			if (mines[y][x].getMine()) {
+				this.isMine = true;				
+			} else {
+				board[y][x].setReveal(true);
+			}
+//			isValid = true;
+		
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	
 	

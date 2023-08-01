@@ -16,6 +16,14 @@ public class Validation extends Minesweeper {
 	public boolean getIsMine() {
 		return this.isMine;
 	}
+	
+//	public void setIsValid(boolean bool) {
+//		this.isValid = bool;
+//	}
+//	
+//	public void getIsMine(boolean bool) {
+//		this.isMine = bool;
+//	}	
 
 	public boolean validateInputRange(int inputNum) {
 		isValid = !(inputNum > this.maxIndex || inputNum < 0);
@@ -38,23 +46,26 @@ public class Validation extends Minesweeper {
 		}
 	}
 	
-	public void checkDuplication(int[][] array, int x, int y) {
-		isValid = !(array[y][x] != 0 && array[y][x] != 88);
+	public void checkDuplication(Cell[][] array, int x, int y) {
+		isValid = !(array[y][x].getReveal() && array[y][x].getFlag());
 		if (!isValid) {
+//			array[y][x].setFlag(false); // ???
 			System.out.println("-- You've already used that. Please enter a different integer. --");
 		}
 		
 	}
 	
-	public boolean removeFlag(int[][] board, int[][] mines, int x, int y, boolean isFlag) {
-		if (board[y][x] == 88 && isFlag) {
+	public boolean removeFlag(Cell[][] board, Cell[][] mines, int x, int y, boolean isFlag) {
+		if (board[y][x].getFlag() && isFlag) {
+			board[y][x].setFlag(false); 
+//			this.flagsCount--; // ** HAVE TO HANDLE FLAGSCOUNT!!!
 			
 			System.out.println("-- It was flagged coordinates. You can now reveal it. --");
 			
-			if (mines[y][x] == 100) {
+			if (mines[y][x].getMine()) {
 				this.isMine = true;				
 			} else {
-				board[y][x] = 0;
+				board[y][x].setReveal(true);
 			}
 			isValid = true;
 		

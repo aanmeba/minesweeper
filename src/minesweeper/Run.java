@@ -148,7 +148,7 @@ public class Run extends Minesweeper {
 				
 				
 				if (isFlag) {
-					flagToNum = validation.removeFlag(
+					flagToNum = gameBoard.removeFlag(
 							gameBoard.getGameBoard(), 
 							gameBoard.getMinesCoords(), 
 							coordX, coordY, isFlag);
@@ -165,7 +165,7 @@ public class Run extends Minesweeper {
 					} else {
 						this.lineBreaker(2);
 						int num = gameBoard.findNeighbour(coordX, coordY);
-						
+						System.out.printf("found neighbour: %d\n", num);
 						// flagToNum is true -> want to remove the flag -> return false to render number
 						// t && !t -> f
 						// t && !f -> t
@@ -195,7 +195,7 @@ public class Run extends Minesweeper {
 						
 						// to win the game, player has to place flags
 						if (gameBoard.getMinesCount() == gameBoard.getFlagsCount()) {
-							System.out.println("mines == flags!! ");
+							System.out.printf("mines %d == flags!! %d\n", gameBoard.getMinesCount(), gameBoard.getMinesCount());
 							playerWon = gameBoard.hasWon();
 						}
 						
