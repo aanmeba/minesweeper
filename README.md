@@ -1,10 +1,23 @@
-# Minesweeper CLI Game
+# Java CLI Game - Minesweeper
 
 This is a Minesweeper command-line interface (CLI) game written in Java.
 
-## Snippets
+## Screenshots
+
+Run the game in hack mode:
+![](./screenshots/game_1.png)
+![](./screenshots/game_2.png)
+![](./screenshots/game_3.png)
 
 ## Requirements
+
+- Recreate a simplified version of Minesweeper for the Java console.
+- Randomly generate 10 mines in a 10x10 grid.
+- Allow users to input coordinates to check a location for a mine.
+- Display a number from 0-8 indicating the number of surrounding mines for each location.
+- If the user selects a mine, respond with "boom!" and the game is lost.
+- If all non-mine squares are revealed, the game is won.
+- Render the grid to the console after each user command.
 
 ## Features
 
@@ -25,5 +38,5 @@ This is a Minesweeper command-line interface (CLI) game written in Java.
 
 ## Future Improvement
 
-[v] Implement a command-line argument feature to upgrade the current hack version.
+[v] Implement a command-line argument feature to upgrade the current hack version.<br />
 [ ] Refactor the `Board` and `Run` classes by breaking down some of the implementation into separate classes.
