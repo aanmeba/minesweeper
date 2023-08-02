@@ -14,6 +14,7 @@ public class Run extends Minesweeper {
 	Run() {
 		this.isGameRunning = true;
 	}
+	
 	Run(String arg) {
 		this.isGameRunning = true;
 		this.isHacked = true;
@@ -28,23 +29,21 @@ public class Run extends Minesweeper {
 		return this.isGameRunning;
 	}
 	
-	public void printTitle(String message) {
-		System.out.println("=======================================");
-		System.out.printf("************* %s *************\n", message);
-		System.out.println("=======================================");
-	}
-	
-	public void printIndicator(String message) {
-		System.out.printf("# %s :\n", message);
+	public void gameOver(boolean maybeMine, boolean isFlag) {
+		gameBoard.printBoard(maybeMine, isFlag);
+		this.finishGame();
+		Print.printTitle(" Game Over ");
 	}
 	
 	public int getCoordinateInput(char xy, Scanner scanner) {
+		
+//		return validation.validateInputs("coordinate", scanner, validation::validateInputRange, xy);
 		int coord = 0;
 		
 		while (true) {
 			System.out.printf("=> Please enter your %s coordinate\n", xy);
+			
 			try {
-				
 				coord = scanner.nextInt();
 				boolean validInput = validation.validateInputRange(coord);
 				validation.printValidationMessage();
@@ -61,6 +60,7 @@ public class Run extends Minesweeper {
 	}
 	
 	public int getFlagOrNum(Scanner scanner) {
+//		return validation.validateInputs("option", scanner, validation::validateOption);
 		int option;
 		
 		while (true) {
@@ -70,7 +70,7 @@ public class Run extends Minesweeper {
 				option = scanner.nextInt();
 				boolean validInput = validation.validateOption(option);
 				validation.printValidationMessage();
-				this.lineBreaker(2);
+				Print.lineBreaker(2);
 			
 				if (validInput) break;
 			} catch(InputMismatchException e) {
@@ -84,16 +84,19 @@ public class Run extends Minesweeper {
 	}
 	
 	public int getBoardSize(Scanner scanner) {
-		int boardSize;
+		
+//		return validation.validateInputs("boardSize", scanner, validation::validateSizeRange);
+		
+		int size;
 		
 		while (true) {
 			System.out.printf("=> Enter the board size you want between %d and %d\n", 
 					this.minBoardSize, this.maxBoardSize);
 			try {
-				boardSize = scanner.nextInt();
-				validation = new Validation(boardSize);
+				size = scanner.nextInt();
+				validation = new Validation(size);
 				
-				boolean validInput = validation.validateSizeRange(boardSize);
+				boolean validInput = validation.validateSizeRange(size);
 				validation.printValidationMessage();
 				
 				if (validInput) break;
@@ -103,35 +106,41 @@ public class Run extends Minesweeper {
 	            scanner.nextLine(); // consume the invalid input
 			 }
 		}
-		return boardSize;
+		return size;
+	}
+	
+	public boolean revealFlag (boolean isFlag, int coordX, int coordY) {
+		return validation.removeFlag(
+				gameBoard.getGameBoard(), 
+				gameBoard.getMinesCoords(), 
+				coordX, coordY, isFlag);		
 	}
 		
 	
 	public void runGame() {
-		this.printTitle("Minesweeper");
-		this.getInstruction();
+		Print.printTitle("Minesweeper");
+		Print.getInstruction(this.minBoardSize, this.maxBoardSize);
 		Scanner scanner = new Scanner(System.in);
 		
 		int boardSize = this.getBoardSize(scanner);
 		gameBoard = new Board(boardSize);
-		this.lineBreaker(2);
+		Print.lineBreaker(2);
 		
 		
-		this.printTitle("Let's Start!");
-		this.printIndicator("Your board");
+		Print.printTitle("Let's Start!");
+		Print.printIndicator("Your board");
 		// print an empty board
 		gameBoard.printBoard(false, false);			
 		
 		if (this.isHacked) {
-			this.printIndicator("Your hacked board");
+			Print.printIndicator("Your hacked board");
 			gameBoard.printBoard(true, false);
 		}
 		
 		while (this.isGameRunning) {
 			
-			
 			try {
-				this.lineBreaker(2);
+				Print.lineBreaker(2);
 				int option = getFlagOrNum(scanner);
 				
 				boolean isFlag = (option == 1) ? false : true;
@@ -148,10 +157,8 @@ public class Run extends Minesweeper {
 				
 				
 				if (isFlag) {
-					flagToNum = validation.removeFlag(
-							gameBoard.getGameBoard(), 
-							gameBoard.getMinesCoords(), 
-							coordX, coordY, isFlag);
+					flagToNum = this.revealFlag(isFlag, coordX, coordY);
+					if (flagToNum) gameBoard.setFlagsCount();
 				}
 				
 				
@@ -159,11 +166,12 @@ public class Run extends Minesweeper {
 					isMine = gameBoard.isMine(coordX, coordY, isFlag);
 					
 					if (isMine && !isFlag) {
-						gameBoard.printBoard(isMine, isFlag);
-						this.finishGame();
-						printTitle(" Game Over ");
+						this.gameOver(isMine, isFlag);
+//						gameBoard.printBoard(isMine, isFlag);
+//						this.finishGame();
+//						printTitle(" Game Over ");
 					} else {
-						this.lineBreaker(2);
+						Print.lineBreaker(2);
 						int num = gameBoard.findNeighbour(coordX, coordY);
 						
 						// flagToNum is true -> want to remove the flag -> return false to render number
@@ -179,28 +187,31 @@ public class Run extends Minesweeper {
 						boolean isStillMine = !isMine ? validation.getIsMine() : isMine;
 						
 						if (isStillMine) {
-							gameBoard.printBoard(isStillMine, isFlag);
-							this.finishGame();
-							printTitle(" Game Over ");
+							this.gameOver(isStillMine, isFlag);
+//							gameBoard.printBoard(isStillMine, isFlag);
+//							this.finishGame();
+//							printTitle(" Game Over ");
 							break;
 						}
 						
 						gameBoard.placeWhat(coordX, coordY, num, toggleFlag);
-						this.printIndicator("Your board");
+						Print.printIndicator("Your board");
 						gameBoard.printBoard(isMine, toggleFlag);
+						
 						if (isHacked) {
-							this.printIndicator("Your hacked board");
+							Print.printIndicator("Your hacked board");
 							gameBoard.printBoard(true, false);
 						}
 						
 						// to win the game, player has to place flags
+						System.out.printf("mines - %d, flags = %d", gameBoard.getMinesCount(), gameBoard.getFlagsCount());
 						if (gameBoard.getMinesCount() == gameBoard.getFlagsCount()) {
-							System.out.println("mines == flags!! ");
-							playerWon = gameBoard.hasWon();
+							playerWon = validation.hasWon(gameBoard.getGameBoard(), gameBoard.getMinesCoords(), this.boardSize);
+							System.out.printf("Yes! mines == flags, %b", playerWon);
 						}
 						
 						if (playerWon) {
-							this.printTitle("YOU WON!!");
+							Print.printTitle("YOU WON!!");
 							this.finishGame();
 							break;
 						}
@@ -212,34 +223,6 @@ public class Run extends Minesweeper {
 			}			
 		}
 		scanner.close();
-	}
-		
-	public void lineBreaker(int num) {
-		for (int i=0; i<num; i++) {
-			System.out.println();			
-		}
-	}
-	
-	public void getInstruction() {
-		this.lineBreaker(1);
-		System.out.println("------------------- Game Instructions -------------------");
-		System.out.println("How to Set Up Your Game:");
-		System.out.printf("1. Choose your board size between %d and %d\n", this.minBoardSize, this.maxBoardSize);
-		System.out.println(" - The number of mines will vary based on your board size");
-		System.out.println(" - The number of hidden mines will be revealed once you enter the board size");
-		System.out.println("2. Select the play mode with or without the \"hacked\" version.");
-		System.out.println(" - The hacked version shows you the locations of all the mines!");
-		this.lineBreaker(1);
-		System.out.println("How to Play:");
-		System.out.println("1. Enter \"1\" to select coordinates or \"2\" to place a flag");
-		System.out.println("2. Input the x and y coordinates separately when prompted");
-		System.out.println("3. If you choose to place a flag (option \"2\"), the cell will be marked as \"@\" and protected");
-		System.out.println("4. To reveal a flagged cell, enter the same coordinates again");
-		System.out.println("5. If you select a cell with a hidden mine, the game will be over");
-		System.out.println("6. Continue playing until you find all the hidden mines by placing flags");
-		System.out.println("---------------------------------------------------------");
-		this.lineBreaker(2);
-
 	}
 
 }
