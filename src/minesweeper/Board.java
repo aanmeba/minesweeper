@@ -6,17 +6,8 @@ public class Board extends Minesweeper {
 	private int minesCount;
 	private int flagsCount = 0;
 		
-	
-	/** LEGEND for boards **
-	 * mines -> 100
-	 * revealed numbers -> 99
-	 * flags -> 88
-	 * */
-	
 	private Cell[][] minesCoords;
 	private Cell[][] gameBoard;
-//	private int[][] minesCoords;
-//	private int[][] gameBoard;
 	
 	Board(int boardSize) {
 		
@@ -27,15 +18,17 @@ public class Board extends Minesweeper {
 		this.minesCoords = new Cell[this.boardSize][this.boardSize];
 		this.gameBoard = new Cell[this.boardSize][this.boardSize];
 		
+		this.initialiseBoard();		
+		this.generateMinesCoords();		
+	}
+	
+	public void initialiseBoard() {
 		for (int x=0; x<this.boardSize; x++) {
 			for (int y=0; y<this.boardSize; y++) {
 				this.minesCoords[y][x] = new Cell();
 				this.gameBoard[y][x] = new Cell();
 			}
 		}
-		
-		this.generateMinesCoords();
-		
 	}
 	
 	public int getRandomNum() {
@@ -81,8 +74,7 @@ public class Board extends Minesweeper {
 			// mark the bomb on the board
 			if (!this.minesCoords[y][x].getMine()) {
 				this.minesCoords[y][x].setMine(true);
-				this.minesCoords[y][x].setReveal(true); // can I use setReveal for mines baord?
-				System.out.printf("y: %d, x: %d\n", y, x);
+				this.minesCoords[y][x].setReveal(true);
 				bombCounter ++;
 			} else {
 				continue;
@@ -115,11 +107,7 @@ public class Board extends Minesweeper {
 	
 	public boolean isMine (int x, int y, boolean isFlag) {
 		if (isFlag) return false;
-		return this.minesCoords[y][x].getMine();
-//		if (!this.minesCoords[y][x].getMine()) {			
-//			return false;
-//		}
-//		return true;		
+		return this.minesCoords[y][x].getMine();	
 	}
 	
 	public void placeWhat(int x, int y, int num, boolean isFlag) {
@@ -143,46 +131,25 @@ public class Board extends Minesweeper {
 	public void printBoard(boolean isMine, boolean isFlag) {
 		if (isMine) {
 			// game done - print a board with mines
-			this.printGameBoard(minesCoords, "mine"); // mine 100
+			this.printGameBoard(minesCoords, "mine"); 
 		} else {
 			if (isFlag) {
 				this.flagsCount++;
-				this.printGameBoard(gameBoard, "flag"); // flag 88
+				this.printGameBoard(gameBoard, "flag"); 
 			} else {
-				this.printGameBoard(gameBoard, "reveal"); // reveal 99
+				this.printGameBoard(gameBoard, "reveal"); 
 			}
 		}
-	}
-	
-	public String printLine() {
-		String lines = "";
-		for (int i=0; i<(this.boardSize * 5); i++ ) {
-			lines += "-";
-		}
-		return lines;
-	}
-	
-	public String printColumnNums() {
-		String columns = "       ";
-		for (int i=0; i<(this.boardSize); i++ ) {
-			if (i < 10) {
-				columns += " " + i + " ";
-			} else {
-				columns += " " + i;	
-			}
-		}
-		return columns;
 	}
 		
-	
 	public void printGameBoard(Cell[][] array, String type) {
 		char mark = (type == "mine") ? '*' :  '0' ;
 		// num -> 88, 99, 100 // mark -> 99 OR 100
 
 		int index = 0;
 		
-		System.out.println(printLine());
-		System.out.println(printColumnNums());
+		System.out.println(Print.printLine(this.boardSize));
+		System.out.println(Print.printColumnNums(this.boardSize));
 		
 		for (Cell[] row: array) {
 			if (index < 10) {
@@ -216,27 +183,27 @@ public class Board extends Minesweeper {
 			System.out.printf("\n");
 			index++;
 		}
-		System.out.println(printLine());
+		System.out.println(Print.printLine(this.boardSize));
 	}
 	
-	public boolean hasWon () {
-		String results = "";
-		
-		// if the number of flags == the number of mines
-		// loop the board and check they are placed in the same positions
-		for (int i=0; i<this.boardSize; i++) {
-			for (int j=0; j<this.boardSize; j++) {
-				if (this.gameBoard[i][j].getFlag()) {
-					if (this.minesCoords[i][j].getMine()) {
-						results += "t";
-					} else {
-						results = "";
-					}
-				}		
-			}
-		}
-		return results != "";
-	}
+//	public boolean hasWon () {
+//		String results = "";
+//		
+//		// if the number of flags == the number of mines
+//		// loop the board and check they are placed in the same positions
+//		for (int i=0; i<this.boardSize; i++) {
+//			for (int j=0; j<this.boardSize; j++) {
+//				if (this.gameBoard[i][j].getFlag()) {
+//					if (this.minesCoords[i][j].getMine()) {
+//						results += "t";
+//					} else {
+//						results = "";
+//					}
+//				}		
+//			}
+//		}
+//		return results != "";
+//	}
 	
 	
 	public boolean outOfBounds(int x, int y) {
@@ -262,26 +229,9 @@ public class Board extends Minesweeper {
 		return minesCounter;
 	}
 	
-//	public boolean removeFlag(Cell[][] board, Cell[][] mines, int x, int y, boolean isFlag) {
-//		if (board[y][x].getFlag() && isFlag) {
-//			board[y][x].setFlag(false); 
-//			this.flagsCount--;
-//			
-//			System.out.println("-- It was flagged coordinates. You can now reveal it. --");
-//			
-//			if (mines[y][x].getMine()) {
-//				this.isMine = true;				
-//			} else {
-//				board[y][x].setReveal(true);
-//			}
-////			isValid = true;
-//		
-//			return true;
-//		} else {
-//			return false;
-//		}
-//		
-//	}
-	
-	
+	/** For Testing **/
+	Board(Cell[][] minesCoords, Cell[][] gameBoard) {
+		this.minesCoords = minesCoords;
+		this.gameBoard = gameBoard;
+	}
 }

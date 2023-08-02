@@ -39,5 +39,26 @@ public class Print {
 			System.out.println();			
 		}
 	}
+	
+	public static String printLine(int size) {
+		String lines = "";
+		for (int i=0; i<(size * 5); i++ ) {
+			lines += "-";
+		}
+		return lines;
+	}
+	
+	public static String printColumnNums(int size) {
+		String columns = "       ";
+		for (int i=0; i<(size); i++ ) {
+			if (i < 10) {
+				columns += " " + i + " ";
+			} else {
+				columns += " " + i;	
+			}
+		}
+		return columns;
+	}
+		
 
 }

@@ -25,7 +25,6 @@ public class Cell extends Minesweeper {
 
 	public void setMine(boolean mine) {
 		this.mine = mine;
-		System.out.printf("setMine, %b\n", this.mine);
 	}
 
 	public boolean getFlag() {
@@ -34,7 +33,6 @@ public class Cell extends Minesweeper {
 
 	public void setFlag(boolean flag) {
 		this.flag = flag;
-		System.out.printf("setFlag, %b\n", this.flag);
 	}
 
 	public boolean getReveal() {
@@ -43,7 +41,6 @@ public class Cell extends Minesweeper {
 
 	public void setReveal(boolean reveal) {
 		this.reveal = reveal;
-		System.out.printf("setReveal, %b\n", this.reveal);
 	}
 
 	public int getNeighbour() {
@@ -52,7 +49,6 @@ public class Cell extends Minesweeper {
 
 	public void setNeighbour(int neighbour) {
 		this.neighbour = neighbour;
-		System.out.printf("setNeighbour, %d\n", this.neighbour);
 	}
 	
 }

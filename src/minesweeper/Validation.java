@@ -68,14 +68,34 @@ public class Validation extends Minesweeper {
 		
 	}
 	
-	public boolean checkYesOrNo(String input) {
-		return (input.toLowerCase().equals("y") || input.toLowerCase().equals("n")); 
+	public boolean hasWon (Cell[][] board, Cell[][] mines, int size) {
+		String results = "";
+		
+		// if the number of flags == the number of mines
+		// loop the board and check they are placed in the same positions
+		for (int i=0; i<size; i++) {
+			for (int j=0; j<size; j++) {
+				if (board[i][j].getFlag()) {
+					if (mines[i][j].getMine()) {
+						results += "t";
+					} else {
+						results = "";
+					}
+				}		
+			}
+		}
+		System.out.println(results); // NOT PRINTED, WHY!?!?
+		return results != "";
 	}
 	
-	public boolean wantHack(String input) {
-		if (input.toLowerCase().equals("y")) return true;
-		return false;		
-	}
+//	public boolean checkYesOrNo(String input) {
+//		return (input.toLowerCase().equals("y") || input.toLowerCase().equals("n")); 
+//	}
+	
+//	public boolean wantHack(String input) {
+//		if (input.toLowerCase().equals("y")) return true;
+//		return false;		
+//	}
 	
 	
 //    public int validateInputs(String inputType, Scanner scanner, Function<Integer, Boolean> validator) {

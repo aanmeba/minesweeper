@@ -35,16 +35,6 @@ public class Run extends Minesweeper {
 		Print.printTitle(" Game Over ");
 	}
 	
-//	public void printTitle(String message) {
-//		System.out.println("=======================================");
-//		System.out.printf("************* %s *************\n", message);
-//		System.out.println("=======================================");
-//	}
-//	
-//	public void printIndicator(String message) {
-//		System.out.printf("# %s :\n", message);
-//	}
-	
 	public int getCoordinateInput(char xy, Scanner scanner) {
 		
 //		return validation.validateInputs("coordinate", scanner, validation::validateInputRange, xy);
@@ -214,8 +204,10 @@ public class Run extends Minesweeper {
 						}
 						
 						// to win the game, player has to place flags
+						System.out.printf("mines - %d, flags = %d", gameBoard.getMinesCount(), gameBoard.getFlagsCount());
 						if (gameBoard.getMinesCount() == gameBoard.getFlagsCount()) {
-							playerWon = gameBoard.hasWon();
+							playerWon = validation.hasWon(gameBoard.getGameBoard(), gameBoard.getMinesCoords(), this.boardSize);
+							System.out.printf("Yes! mines == flags, %b", playerWon);
 						}
 						
 						if (playerWon) {
@@ -232,33 +224,5 @@ public class Run extends Minesweeper {
 		}
 		scanner.close();
 	}
-		
-//	public void lineBreaker(int num) {
-//		for (int i=0; i<num; i++) {
-//			System.out.println();			
-//		}
-//	}
-//	
-//	public void getInstruction() {
-//		this.lineBreaker(1);
-//		System.out.println("------------------- Game Instructions -------------------");
-//		System.out.println("How to Set Up Your Game:");
-//		System.out.printf("1. Choose your board size between %d and %d\n", this.minBoardSize, this.maxBoardSize);
-//		System.out.println(" - The number of mines will vary based on your board size");
-//		System.out.println(" - The number of hidden mines will be revealed once you enter the board size");
-//		System.out.println("2. Select the play mode with or without the \"hacked\" version.");
-//		System.out.println(" - The hacked version shows you the locations of all the mines!");
-//		this.lineBreaker(1);
-//		System.out.println("How to Play:");
-//		System.out.println("1. Enter \"1\" to select coordinates or \"2\" to place a flag");
-//		System.out.println("2. Input the x and y coordinates separately when prompted");
-//		System.out.println("3. If you choose to place a flag (option \"2\"), the cell will be marked as \"@\" and protected");
-//		System.out.println("4. To reveal a flagged cell, enter the same coordinates again");
-//		System.out.println("5. If you select a cell with a hidden mine, the game will be over");
-//		System.out.println("6. Continue playing until you find all the hidden mines by placing flags");
-//		System.out.println("---------------------------------------------------------");
-//		this.lineBreaker(2);
-//
-//	}
 
 }
