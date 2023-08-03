@@ -36,8 +36,12 @@ Run the game in hack mode:
   1. Move into the parent directory of `bin` and `src`
   2. Run the program with the hack command, just after the file name: `java -cp bin minesweeper.Main hack`
 
+## Known Issues
+
+- [ ] Print alert for selecting duplicate coords of flags just before game over
+
 ## Future Improvement
 
-[v] Implement a command-line argument feature to upgrade the current hack version.<br />
-[ ] Refactor the `Board` and `Run` classes by breaking down some of the implementation into separate classes.
-[ ] Refactor the marks for flags, revealed cells, mines to improve the readability, currently they are represented as numbers (88, 99, 100) respectively.
+- [v] Implement a command-line argument feature to upgrade the current hack version.
+- [ ] Refactor the `Board` and `Run` classes by breaking down some of the implementation into separate classes.
+- [ ] Refactor the marks for flags, revealed cells, mines to improve the readability, currently they are represented as numbers (88, 99, 100) respectively.

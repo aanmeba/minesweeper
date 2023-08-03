@@ -40,6 +40,8 @@ public class Validation extends Minesweeper {
 	}
 	
 	public void checkDuplication(Cell[][] array, int x, int y) {
+		
+		// num -> reveal true --> isValid should be false!
 		isValid = !(array[y][x].getReveal() && array[y][x].getFlag());
 		if (!isValid) {
 //			array[y][x].setFlag(false); // ???
@@ -47,6 +49,8 @@ public class Validation extends Minesweeper {
 		}
 		
 	}
+		
+	
 	
 	public boolean removeFlag(Cell[][] board, Cell[][] mines, int x, int y, boolean isFlag) {
 		if (board[y][x].getFlag() && isFlag) {

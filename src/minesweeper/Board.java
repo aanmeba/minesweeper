@@ -8,6 +8,7 @@ public class Board extends Minesweeper {
 		
 	private Cell[][] minesCoords;
 	private Cell[][] gameBoard;
+	private char[][] calculatedBoard;
 	
 	Board(int boardSize) {
 		
@@ -17,6 +18,7 @@ public class Board extends Minesweeper {
 		this.setDifficulty();
 		this.minesCoords = new Cell[this.boardSize][this.boardSize];
 		this.gameBoard = new Cell[this.boardSize][this.boardSize];
+		this.calculatedBoard = new char[this.boardSize][this.boardSize];
 		
 		this.initialiseBoard();		
 		this.generateMinesCoords();		
@@ -27,9 +29,11 @@ public class Board extends Minesweeper {
 			for (int y=0; y<this.boardSize; y++) {
 				this.minesCoords[y][x] = new Cell();
 				this.gameBoard[y][x] = new Cell();
+				this.calculatedBoard[y][x] = ' ';
 			}
 		}
 	}
+	
 	
 	public int getRandomNum() {
 		return (int) Math.round(Math.random()* (this.boardSize - 1));
@@ -105,105 +109,77 @@ public class Board extends Minesweeper {
 		this.flagsCount--;
 	}
 	
+
+	public char[][] getCalculatedBoard() {
+		return this.calculatedBoard;
+	}
+	
+	
 	public boolean isMine (int x, int y, boolean isFlag) {
 		if (isFlag) return false;
 		return this.minesCoords[y][x].getMine();	
 	}
 	
 	public void placeWhat(int x, int y, int num, boolean isFlag) {
+		
 		if (isFlag) {
-			this.gameBoard[y][x].setFlag(isFlag);;
-			this.gameBoard[y][x].setReveal(true);;
+			this.gameBoard[y][x].setFlag(isFlag);
+			this.gameBoard[y][x].setReveal(true);
 		} else {
 			
 			if (num == 0) {
-				// if the selected coords has no (0) mine -> set 99
-				// since the empty element is 0 
-				this.gameBoard[y][x].setReveal(true);;
+				this.gameBoard[y][x].setReveal(true);
 			} else {
 				this.gameBoard[y][x].setNeighbour(num);
-				this.gameBoard[y][x].setReveal(true);;
+				this.gameBoard[y][x].setReveal(true);
 			}
 		}
 	}
 	
+	public Cell[][] whichBoard(boolean isMine) {
+		if (isMine) return this.minesCoords; 
+		return this.gameBoard;
+	}
 	
-	public void printBoard(boolean isMine, boolean isFlag) {
-		if (isMine) {
-			// game done - print a board with mines
-			this.printGameBoard(minesCoords, "mine"); 
+	public String whichType(boolean isMine, boolean isFlag) {
+		if (isMine) return "mine"; 
+		if (isFlag) {
+			this.flagsCount++;
+			return "flag"; 
 		} else {
-			if (isFlag) {
-				this.flagsCount++;
-				this.printGameBoard(gameBoard, "flag"); 
-			} else {
-				this.printGameBoard(gameBoard, "reveal"); 
-			}
+			return "reveal"; 
 		}
+	
 	}
-		
-	public void printGameBoard(Cell[][] array, String type) {
+	
+	
+	public void calculateCellsInBoard(Cell[][] array, String type) {
 		char mark = (type == "mine") ? '*' :  '0' ;
-		// num -> 88, 99, 100 // mark -> 99 OR 100
-
-		int index = 0;
 		
-		System.out.println(Print.printLine(this.boardSize));
-		System.out.println(Print.printColumnNums(this.boardSize));
-		
-		for (Cell[] row: array) {
-			if (index < 10) {
-				System.out.printf("  %d    |", index);
-			} else {
-				System.out.printf(" %d    |", index);
-			}
-			for (Cell dot:row) {
+		for (int y=0; y<array.length; y++) {			
+			for (int x=0; x<array.length; x++) {
 				
-				if (!dot.getReveal()) { // 99
-					System.out.printf(" ");
-					
-				} else if (dot.getFlag() || dot.getMine()) {
-					if (dot.getFlag()) { // 88 || 100
-						System.out.printf("%s", '@');						
+				if (!array[y][x].getReveal()) {
+					this.calculatedBoard[y][x] = ' ';
+				} else if (array[y][x].getFlag() || array[y][x].getMine()) {
+					if (array[y][x].getFlag()) { 
+						this.calculatedBoard[y][x] = '@';				
 					} else {	
-						System.out.printf("%s", mark);	// *?					
+						this.calculatedBoard[y][x] = mark;			
 					}
 				} else {	
-					if (dot.getFlag()) {
-						System.out.printf("%s", '@');						
-					} else if (dot.getNeighbour() == 0) {
-						System.out.printf("%s", '0');
+					if (array[y][x].getFlag()) {
+						this.calculatedBoard[y][x] = '@';					
+					} else if (array[y][x].getNeighbour() == 0) {
+						this.calculatedBoard[y][x] = '0';
 					} else {
-						System.out.printf("%d", dot.getNeighbour()); // already revealed					
+						int num = array[y][x].getNeighbour();
+						this.calculatedBoard[y][x] = (char) (num + '0');					
 					}
-				}
-				System.out.printf(" |");
-				
+				}	
 			}
-			System.out.printf("\n");
-			index++;
 		}
-		System.out.println(Print.printLine(this.boardSize));
 	}
-	
-//	public boolean hasWon () {
-//		String results = "";
-//		
-//		// if the number of flags == the number of mines
-//		// loop the board and check they are placed in the same positions
-//		for (int i=0; i<this.boardSize; i++) {
-//			for (int j=0; j<this.boardSize; j++) {
-//				if (this.gameBoard[i][j].getFlag()) {
-//					if (this.minesCoords[i][j].getMine()) {
-//						results += "t";
-//					} else {
-//						results = "";
-//					}
-//				}		
-//			}
-//		}
-//		return results != "";
-//	}
 	
 	
 	public boolean outOfBounds(int x, int y) {

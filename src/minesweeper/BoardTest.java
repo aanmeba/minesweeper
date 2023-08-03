@@ -13,6 +13,7 @@ public class BoardTest {
 	int boardSize = 5;
 	Cell[][] minesCoords;
 	Cell[][] gameBoard;
+	char[][] calculatedBoard;
 	int mineX = 0;
 	int mineY = 0;
 	int flagX = 3;
@@ -30,6 +31,11 @@ public class BoardTest {
 		gameBoard[flagY][flagX] = new Cell();
 		gameBoard[revealY][revealX] = new Cell();
 		
+		calculatedBoard = new char[boardSize][boardSize];
+		calculatedBoard[mineY][mineX] = ' ';
+		calculatedBoard[flagY][flagX] = ' ';
+		calculatedBoard[revealY][revealX] = ' ';
+				
 		underTest = new Board(minesCoords, gameBoard);			
 	}
 	
@@ -96,10 +102,14 @@ public class BoardTest {
 		assertEquals(num, foundNeighbour);
 	}
 	
+	
 //	@Test
-//	public void printBoard_IfIsMineIsTrue_CallPrintGameBoardWithMinesCoordsAndMine() {
-//		boolean isMine = true;
-//		boolean isFlag = true;
+//	public void calculateCellsInBoard_AssignCorrectMarks() {
+//		
+//		// minesCoords
+//		underTest.calculateCellsInBoard(minesCoords, "mine");
+//		char foundMine = calculatedBoard[mineY][mineX];
+//		assertEquals('*', foundMine);
 //		
 //	}
 	

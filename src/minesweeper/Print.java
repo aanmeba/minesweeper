@@ -1,7 +1,7 @@
 package minesweeper;
 
 public class Print {
-	
+		
 	public static void printTitle(String message) {
 		System.out.println("=======================================");
 		System.out.printf("************* %s *************\n", message);
@@ -58,6 +58,34 @@ public class Print {
 			}
 		}
 		return columns;
+	}
+	
+	public static void printBoardFrame(char[][] array) {
+		int index = 0;
+		int size = array.length;
+		
+		System.out.println(Print.printLine(size));
+		System.out.println(Print.printColumnNums(size));
+		
+		for (char[] row: array) {
+			if (index < 10) {
+				System.out.printf("  %d    |", index);
+			} else {
+				System.out.printf(" %d    |", index);
+			}
+			for (char dot:row) {
+				System.out.print(dot);
+				System.out.printf(" |");
+				
+			}
+			System.out.printf("\n");
+			index++;
+		}
+		System.out.println(Print.printLine(size));
+	}
+	
+	public static void printInvalidInput() {
+		System.out.println("-- Invalid input. Please enter a valid integer. --");
 	}
 		
 
