@@ -2,11 +2,10 @@ package minesweeper;
 
 public class Cell extends Minesweeper {
 
-	private boolean mine; // 100
-	private boolean flag; // 88
+	private boolean reveal; 
 	
-	// reveal is true only if mine || flag is true, not neighbour
-	private boolean reveal; // 99
+  private boolean mine; 
+	private boolean flag; 
 	private int neighbour;
 	
 	public Cell () {
@@ -25,6 +24,7 @@ public class Cell extends Minesweeper {
 
 	public void setMine(boolean mine) {
 		this.mine = mine;
+		this.reveal = mine;
 	}
 
 	public boolean getFlag() {
@@ -33,6 +33,7 @@ public class Cell extends Minesweeper {
 
 	public void setFlag(boolean flag) {
 		this.flag = flag;
+		this.reveal = flag;
 	}
 
 	public boolean getReveal() {
@@ -49,6 +50,8 @@ public class Cell extends Minesweeper {
 
 	public void setNeighbour(int neighbour) {
 		this.neighbour = neighbour;
+		this.reveal = true;
 	}
+	
 	
 }

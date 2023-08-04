@@ -87,6 +87,14 @@ public class Print {
 	public static void printInvalidInput() {
 		System.out.println("-- Invalid input. Please enter a valid integer. --");
 	}
+	
+	public static void printDuplication() {
+		System.out.println("-- You've already used that. Please enter a different integer. --");
+	}
+	
+	public static void printRevealFlag() {
+		System.out.println("-- It was flagged coordinates. You can now reveal it. --");
+	}
 		
 
 }

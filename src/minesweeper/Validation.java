@@ -4,8 +4,6 @@ public class Validation extends Minesweeper {
 
 	private boolean isValid;
 	
-//	public Validation() {}
-	
 	public Validation(int boardSize) {
 		this.maxIndex = boardSize - 1;
 	}
@@ -16,6 +14,10 @@ public class Validation extends Minesweeper {
 	
 	public boolean getIsMine() {
 		return this.isMine;
+	}
+	
+	public int getMaxIndex() {
+		return this.maxIndex;
 	}
 	
 	public boolean validateInputRange(int inputNum) {
@@ -34,18 +36,22 @@ public class Validation extends Minesweeper {
 	}
 	
 	public void printValidationMessage() {
-		if (isValid != true) {
-			System.out.println("-- Invalid input. Please enter a valid integer. --");
-		}
+		if (isValid != true) Print.printInvalidInput();
 	}
 	
-	public void checkDuplication(Cell[][] array, int x, int y) {
+	public void checkDuplication(Cell[][] board, int x, int y, boolean isFlag) {
 		
-		// num -> reveal true --> isValid should be false!
-		isValid = !(array[y][x].getReveal() && array[y][x].getFlag());
+		// 1. coords -> F / 2. flag -> T
+		if (!isFlag) {
+			
+			// If the cell is previously selected -> getReveal() == true
+			isValid = !board[y][x].getReveal();
+		} else {
+			isValid = !board[y][x].getReveal() || board[y][x].getFlag();
+		}
+		
 		if (!isValid) {
-//			array[y][x].setFlag(false); // ???
-			System.out.println("-- You've already used that. Please enter a different integer. --");
+			Print.printDuplication();
 		}
 		
 	}
@@ -54,14 +60,12 @@ public class Validation extends Minesweeper {
 	
 	public boolean removeFlag(Cell[][] board, Cell[][] mines, int x, int y, boolean isFlag) {
 		if (board[y][x].getFlag() && isFlag) {
-			board[y][x].setFlag(false); 
+			board[y][x].setFlag(false);
 			
-			System.out.println("-- It was flagged coordinates. You can now reveal it. --");
+			Print.printRevealFlag();
 			
 			if (mines[y][x].getMine()) {
 				this.isMine = true;				
-			} else {
-				board[y][x].setReveal(true);
 			}
 			isValid = true;
 		
@@ -88,7 +92,6 @@ public class Validation extends Minesweeper {
 				}		
 			}
 		}
-		System.out.println(results); // NOT PRINTED, WHY!?!?
 		return results != "";
 	}
 	

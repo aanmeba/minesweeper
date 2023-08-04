@@ -78,7 +78,6 @@ public class Board extends Minesweeper {
 			// mark the bomb on the board
 			if (!this.minesCoords[y][x].getMine()) {
 				this.minesCoords[y][x].setMine(true);
-				this.minesCoords[y][x].setReveal(true); ///**************
 				bombCounter ++;
 			} else {
 				continue;
@@ -131,14 +130,11 @@ public class Board extends Minesweeper {
 		
 		if (isFlag) {
 			this.gameBoard[y][x].setFlag(isFlag);
-			this.gameBoard[y][x].setReveal(true);
 		} else {
 			
 			if (num == 0) {
-				this.gameBoard[y][x].setReveal(true);
 			} else {
 				this.gameBoard[y][x].setNeighbour(num);
-				this.gameBoard[y][x].setReveal(true);
 			}
 		}
 	}

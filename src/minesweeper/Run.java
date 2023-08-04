@@ -160,7 +160,7 @@ public class Run extends Minesweeper {
 								
 				if (validation.getIsValid()) {
 					// set isValid value in the Validation class
-					validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY);
+					validation.checkDuplication(gameBoard.getGameBoard(), coordX, coordY, isFlag);
 					
 				}
 				
