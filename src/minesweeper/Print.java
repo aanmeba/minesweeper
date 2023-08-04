@@ -12,6 +12,19 @@ public class Print {
 		System.out.printf("# %s :\n", message);
 	}
 	
+	public static void printPromptOption() {
+		System.out.println("=> Options:\n1. Select coordinates\n2. Place a flag\n");
+	}
+	
+	public static void printPromptOption(char xy) {
+		System.out.printf("=> Please enter your %s coordinate\n", xy);
+	}
+	
+	public static void printPromptOption(int min, int max) {
+		System.out.printf("=> Enter the board size you want between %d and %d\n", 
+				min, max);
+	}
+	
 	public static void getInstruction(int min, int max) {
 		lineBreaker(1);
 		System.out.println("------------------- Game Instructions -------------------");

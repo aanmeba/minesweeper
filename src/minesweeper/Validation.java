@@ -4,6 +4,7 @@ public class Validation extends Minesweeper {
 
 	private boolean isValid;
 	
+	public Validation() {}
 	public Validation(int boardSize) {
 		this.maxIndex = boardSize - 1;
 	}
@@ -94,71 +95,4 @@ public class Validation extends Minesweeper {
 		}
 		return results != "";
 	}
-	
-	
-//    public int validateInputs(String inputType, Scanner scanner, Function<Integer, Boolean> validator) {
-//        int inputValue = 0;
-//        
-//        System.out.println(inputType);
-//
-//        while (true) {
-//        	
-//        	this.setString(inputType);
-//        	
-//            try {
-//                inputValue = scanner.nextInt();
-//                boolean validInput = validator.apply(inputValue);
-//                this.printValidationMessage();
-//
-//                if (validInput) break;
-//                
-//            } catch (InputMismatchException e) {
-//                System.out.println("-- Invalid input. Please enter a valid integer. --");
-//                scanner.nextLine(); // consume the invalid input
-//            }
-//        }
-//        return inputValue;
-//    }
-    
-//    public int validateInputs(String inputType, Scanner scanner, Function<Integer, Boolean> validator, String str) {
-//        int inputValue = 0;
-//        
-//        System.out.println(inputType);
-//
-//        while (true) {
-//        	
-//        	System.out.printf("=> Please enter your %s coordinate\n", str);
-//        	
-//            try {
-//                inputValue = scanner.nextInt();
-//                boolean validInput = validator.apply(inputValue);
-//                this.printValidationMessage();
-//
-//                if (validInput) break;
-//                
-//            } catch (InputMismatchException e) {
-//                System.out.println("-- Invalid input. Please enter a valid integer. --");
-//                scanner.nextLine(); // consume the invalid input
-//            }
-//        }
-//        return inputValue;
-//    }
-    
-    
-//    public void setString(String type) {
-//    	
-//    	switch(type) {
-//    	case "option":
-//    		System.out.println("=> Options:\n1. Select coordinates\n2. Place a flag\n");
-//    		break;
-//    	case "boardSize":
-//    		System.out.println("boardSize -----");
-//    		System.out.printf("=> Enter the board size you want between %d and %d\n", 
-//    				this.minBoardSize, this.maxBoardSize);
-//    		break;
-//    	default:
-//    		break;
-//    	}
-//    }
-		
 }

@@ -75,7 +75,7 @@ public class Board extends Minesweeper {
 			int x = getRandomNum();
 			int y = getRandomNum();
 			
-			// mark the bomb on the board
+			// mark mines on the board
 			if (!this.minesCoords[y][x].getMine()) {
 				this.minesCoords[y][x].setMine(true);
 				bombCounter ++;
@@ -87,7 +87,6 @@ public class Board extends Minesweeper {
 		System.out.printf("-- %d Mines Hidden --\n", bombCounter);
 	}
 	
-	// getter
 	public Cell[][] getMinesCoords() {
 		return this.minesCoords;
 	}
