@@ -38,10 +38,29 @@ Run the game in hack mode:
 
 ## Known Issues
 
-- [ ] Print alert for selecting duplicate coords of flags just before game over
+- [v] Print alert for selecting duplicate coords of flags just before game over
 
 ## Future Improvement
 
 - [v] Implement a command-line argument feature to upgrade the current hack version.
-- [ ] Refactor the `Board` and `Run` classes by breaking down some of the implementation into separate classes.
-- [ ] Refactor the marks for flags, revealed cells, mines to improve the readability, currently they are represented as numbers (88, 99, 100) respectively.
+- [v] Refactor the `Board` and `Run` classes by breaking down some of the implementation into separate classes.
+- [v] Refactor the marks for flags, revealed cells, mines to improve the readability, currently they are represented as numbers (88, 99, 100) respectively.
+
+## Change Logs
+
+### 02/08/2023 - Creating `Cell` Class
+
+- Created `Cell` class to take care of each cell
+  - Previously mine, flag, number were represented as meaningless numbers like 100, 99, 88
+  - By creating `Cell` class, each element has more readable values
+
+### 03/08/2023 - Testing Code & Refactoring
+
+- Wrote testing code for `Board` class
+
+### 04/08/2023 - Testing Code & Refactoring
+
+- Wrote testing code for `Cell`, `Validation`, `Run` class
+- Wrote more testable code:
+  - Breaking down methods
+  - Separating layers of code - creating `Print` class for UI
