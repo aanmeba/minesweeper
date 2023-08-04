@@ -92,15 +92,6 @@ public class Validation extends Minesweeper {
 		return results != "";
 	}
 	
-//	public boolean checkYesOrNo(String input) {
-//		return (input.toLowerCase().equals("y") || input.toLowerCase().equals("n")); 
-//	}
-	
-//	public boolean wantHack(String input) {
-//		if (input.toLowerCase().equals("y")) return true;
-//		return false;		
-//	}
-	
 	
 //    public int validateInputs(String inputType, Scanner scanner, Function<Integer, Boolean> validator) {
 //        int inputValue = 0;

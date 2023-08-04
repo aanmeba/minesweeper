@@ -21,7 +21,7 @@ public class Board extends Minesweeper {
 		this.calculatedBoard = new char[this.boardSize][this.boardSize];
 		
 		this.initialiseBoard();		
-		this.generateMinesCoords();		
+		this.generateMinesCoords();
 	}
 	
 	public void initialiseBoard() {
@@ -78,7 +78,7 @@ public class Board extends Minesweeper {
 			// mark the bomb on the board
 			if (!this.minesCoords[y][x].getMine()) {
 				this.minesCoords[y][x].setMine(true);
-				this.minesCoords[y][x].setReveal(true);
+				this.minesCoords[y][x].setReveal(true); ///**************
 				bombCounter ++;
 			} else {
 				continue;
@@ -109,6 +109,13 @@ public class Board extends Minesweeper {
 		this.flagsCount--;
 	}
 	
+	public int getMaxIndex() {
+		return this.maxIndex;
+	}
+	
+	public int getBoardSize() {
+		return this.boardSize;
+	}	
 
 	public char[][] getCalculatedBoard() {
 		return this.calculatedBoard;
@@ -158,21 +165,27 @@ public class Board extends Minesweeper {
 		
 		for (int y=0; y<array.length; y++) {			
 			for (int x=0; x<array.length; x++) {
-				
-				if (!array[y][x].getReveal()) {
+				if (!array[y][x].getReveal()) { 
+					
 					this.calculatedBoard[y][x] = ' ';
+					
 				} else if (array[y][x].getFlag() || array[y][x].getMine()) {
-					if (array[y][x].getFlag()) { 
+					
+					if (array[y][x].getFlag()) {
 						this.calculatedBoard[y][x] = '@';				
-					} else {	
+					} else {
 						this.calculatedBoard[y][x] = mark;			
 					}
+					
 				} else {	
+					
 					if (array[y][x].getFlag()) {
 						this.calculatedBoard[y][x] = '@';					
+					
 					} else if (array[y][x].getNeighbour() == 0) {
 						this.calculatedBoard[y][x] = '0';
-					} else {
+					
+					} else {						
 						int num = array[y][x].getNeighbour();
 						this.calculatedBoard[y][x] = (char) (num + '0');					
 					}
@@ -205,9 +218,4 @@ public class Board extends Minesweeper {
 		return minesCounter;
 	}
 	
-	/** For Testing **/
-	Board(Cell[][] minesCoords, Cell[][] gameBoard) {
-		this.minesCoords = minesCoords;
-		this.gameBoard = gameBoard;
-	}
 }
