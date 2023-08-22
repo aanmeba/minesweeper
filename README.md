@@ -1,8 +1,10 @@
 # Java CLI Game - Minesweeper
 
+![example workflow](https://github.com/aanmeba/minesweeper/actions/workflows/github-actions-demo.yml/badge.svg)
+
 This is a Minesweeper command-line interface (CLI) game written in Java.
 
-## Screenshots
+## Snippets
 
 Run the game in hack mode:
 ![](./screenshots/game_1.png)
@@ -25,26 +27,30 @@ Run the game in hack mode:
 - **Place a flag**: Players can place flags on the board, up to the number of mines present. Flags can also be removed, and when a coordinate is revealed, it will show if it contains a mine or the number of nearby mines.
 - **Hack Mode with Command Line Argument**: There is a hacked version available that reveals the location of mines, for those who want to play with some assistance.
 
-  To enable the hack mode in Eclipse, follow these steps:
+## Build Steps
 
-  1. Navigate to `Run As` -> `Run Configurations`.
-  2. In the `Arguments` tab, add `hack`
-  3. Click `Run` to execute the program in hack mode
+Once you clone this repository with this command-line `git clone`, open this project with your choice of IDE.
 
-  In Terminal, follow these steps:
+To enable the hack mode in Eclipse, follow these steps:
 
-  1. Move into the parent directory of `bin` and `src`
-  2. Run the program with the hack command, just after the file name: `java -cp bin minesweeper.Main hack`
+1. Navigate to `Run As` -> `Run Configurations`.
+2. In the `Arguments` tab, add `hack`
+3. Click `Run` to execute the program in hack mode
+
+In Terminal, follow these steps:
+
+1. Move into the parent directory of `bin` and `src`
+2. Run the program with the hack command, just after the file name: `java -cp bin minesweeper.Main hack`
 
 ## Known Issues
 
-- [v] Print alert for selecting duplicate coords of flags just before game over
+- [x] Print alert for selecting duplicate coords of flags just before game over
 
 ## Future Improvement
 
-- [v] Implement a command-line argument feature to upgrade the current hack version.
-- [v] Refactor the `Board` and `Run` classes by breaking down some of the implementation into separate classes.
-- [v] Refactor the marks for flags, revealed cells, mines to improve the readability, currently they are represented as numbers (88, 99, 100) respectively.
+- [x] Implement a command-line argument feature to upgrade the current hack version.
+- [x] Refactor the `Board` and `Run` classes by breaking down some of the implementation into separate classes.
+- [x] Refactor the marks for flags, revealed cells, mines to improve the readability, currently they are represented as numbers (88, 99, 100) respectively.
 
 ## Change Logs
 
