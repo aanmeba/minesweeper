@@ -108,6 +108,8 @@ public class BoardTest {
 		
 		underTest.placeWhat(x, y, num, isFlag);
 		boolean revealed = underTest.getGameBoard()[y][x].getReveal();
+		System.out.println("************ +++++++++");
+		System.out.println(revealed);
 		assertEquals(true, revealed);
 	}
 	

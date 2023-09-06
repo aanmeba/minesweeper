@@ -152,15 +152,5 @@ public class ValidationTest {
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

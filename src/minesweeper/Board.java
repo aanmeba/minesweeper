@@ -131,10 +131,10 @@ public class Board extends Minesweeper {
 			this.gameBoard[y][x].setFlag(isFlag);
 		} else {
 			
-			if (num == 0) {
-			} else {
+//			if (num == 0) {
+//			} else {
 				this.gameBoard[y][x].setNeighbour(num);
-			}
+//			}
 		}
 	}
 	
